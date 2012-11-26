@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <!-- FakeScrollView is a hack to avoid problems to know the real height of the views -->
+
+    <com.inqbarna.tablefixheaders.FakeScrollView
+        android:id="@+id/scroll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fadingEdgeLength="0dip"
+        android:scrollbars="none" >
+
+        <TableLayout
+            android:id="@+id/root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <TableRow>
+
+                <LinearLayout
+                    android:id="@+id/header_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" >
+
+                    <LinearLayout
+                        android:id="@+id/header_row"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal" />
+
+                    <View
+                        android:id="@+id/shadow_left_1"
+                        android:layout_width="@dimen/shadow_size"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left"
+                        android:background="@drawable/shadow_left"
+                        android:visibility="gone" />
+                </FrameLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <LinearLayout
+                        android:id="@+id/header_column"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <LinearLayout
+                        android:id="@+id/shadow_top_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/shadow_size"
+                        android:layout_gravity="top"
+                        android:background="@drawable/shadow_top"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <LinearLayout
+                        android:id="@+id/body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <View
+                        android:id="@+id/shadow_left_2"
+                        android:layout_width="@dimen/shadow_size"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="left"
+                        android:background="@drawable/shadow_left"
+                        android:visibility="gone" />
+
+                    <View
+                        android:id="@+id/shadow_top_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/shadow_size"
+                        android:layout_gravity="top"
+                        android:background="@drawable/shadow_top"
+                        android:visibility="gone" />
+                </FrameLayout>
+            </TableRow>
+        </TableLayout>
+    </com.inqbarna.tablefixheaders.FakeScrollView>
+
+    <View
+        android:id="@+id/shadow_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/shadow_size"
+        android:layout_gravity="bottom"
+        android:background="@drawable/shadow_bottom"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/shadow_right"
+        android:layout_width="@dimen/shadow_size"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="@drawable/shadow_right"
+        android:visibility="gone" />
+
+</FrameLayout>
