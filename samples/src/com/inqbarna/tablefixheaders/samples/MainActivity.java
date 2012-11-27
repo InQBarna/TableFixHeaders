@@ -16,9 +16,8 @@ public class MainActivity extends ListActivity {
 		setContentView(R.layout.activity_main);
 
 		B b[] = new B[] {
-				new B("Simple adapter", SimpleTable.class),
-				new B("Custom adapter", MainActivity.class),
-				new B("Family adapter", MainActivity.class),
+				new B(getString(R.string.simple_adapter), SimpleTable.class),
+				new B(getString(R.string.style_adapter), StyleTable.class),
 		};
 		setListAdapter(new ArrayAdapter<B>(this, android.R.layout.simple_list_item_1, android.R.id.text1, b));
 	}
