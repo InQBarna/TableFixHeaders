@@ -2,6 +2,7 @@ package com.inqbarna.tablefixheaders.adapters;
 
 import com.inqbarna.tablefixheaders.TableFixHeaders;
 
+import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -66,4 +67,41 @@ public interface TableAdapter {
 	 * @return The height of the row, in pixels.
 	 */
 	public int getHeight(int row);
+	
+	/**
+	 * Implement these methods to allow a client application class to
+	 * if you want {@link TableFixHeaders} to attach to your Custom implementation
+	 * of {@link TableAdapter}
+	 * 
+	 * @author David García <david.garcia@inqbarna.com>
+	 *
+	 */
+	public interface Observable {
+
+		/**
+		 * Register an observer within this adapter.
+		 * 
+		 * If you are implementing this interface {@link TableFixHeaders} will call this
+		 * method to register a {@link DataSetObserver} that should be notified
+		 * of data changes
+		 * 
+		 * @param observer
+		 *            The observer instance
+		 */
+		public void registerDataSetObserver(DataSetObserver observer);
+
+		/**
+		 * Unregister an observer from this adapter.
+		 * 
+		 * If you are implementing this interface {@link TableFixHeaders} will call this
+		 * method to un-register a {@link DataSetObserver} to stop receiving
+		 * notifications.
+		 * 
+		 * @param observer
+		 *            The observer instance
+		 */
+		public void unregisterDataSetObserver(DataSetObserver observer);
+
+	}
+	
 }

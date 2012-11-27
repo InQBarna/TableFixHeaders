@@ -3,6 +3,7 @@ package com.inqbarna.tablefixheaders;
 import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -165,6 +166,21 @@ public class TableFixHeaders extends LinearLayout {
 	 */
 	public void setAdapter(TableAdapter adapter) {
 		this.adapter = adapter;
+		
+		if (adapter instanceof TableAdapter.Observable) {
+			((TableAdapter.Observable)this.adapter).registerDataSetObserver(new DataSetObserver() {
+
+				/**
+				 * This overrides onChanged
+				 *
+				 * @see android.database.DataSetObserver#onChanged()
+				 */
+				@Override
+				public void onChanged() {
+					onDataChange();
+				}
+			});
+		}
 
 		onDataChange();
 
