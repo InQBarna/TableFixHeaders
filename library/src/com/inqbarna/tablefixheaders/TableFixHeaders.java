@@ -22,6 +22,8 @@ public class TableFixHeaders extends LinearLayout {
 
 	private final Context context;
 
+	private ScrollView scrollView;
+
 	private final LinearLayout headerLinearLayout;
 	private final LinearLayout headerRowLinearLayout;
 	private final LinearLayout headerColumnLinearLayout;
@@ -31,8 +33,6 @@ public class TableFixHeaders extends LinearLayout {
 	private int currentY;
 
 	private TableAdapter adapter;
-
-	private ScrollView scrollView;
 
 	private int maxScrollX;
 	private int maxScrollY;
@@ -71,10 +71,10 @@ public class TableFixHeaders extends LinearLayout {
 		LayoutInflater.from(context).inflate(R.layout.fix_table_layout, this, true);
 
 		scrollView = (ScrollView) findViewById(R.id.scroll);
-		headerLinearLayout = ((LinearLayout) findViewById(R.id.header_text));
-		headerRowLinearLayout = ((LinearLayout) findViewById(R.id.header_row));
-		headerColumnLinearLayout = ((LinearLayout) findViewById(R.id.header_column));
-		bodyLinearLayout = ((LinearLayout) findViewById(R.id.body));
+		headerLinearLayout = (LinearLayout) findViewById(R.id.header_text);
+		headerRowLinearLayout = (LinearLayout) findViewById(R.id.header_row);
+		headerColumnLinearLayout = (LinearLayout) findViewById(R.id.header_column);
+		bodyLinearLayout = (LinearLayout) findViewById(R.id.body);
 	}
 
 	@Override
