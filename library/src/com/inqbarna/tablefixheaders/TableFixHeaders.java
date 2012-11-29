@@ -194,7 +194,10 @@ public class TableFixHeaders extends LinearLayout {
 		bodyLinearLayout.removeAllViews();
 
 		LinearLayout linearLayout = new LinearLayout(context);
-		linearLayout.setLayoutParams(new TableRow.LayoutParams(adapter.getWidth(-1), adapter.getHeight(-1)));
+		final int width = adapter.getWidth(-1);
+		final int height = adapter.getHeight(-1);
+
+		linearLayout.setLayoutParams(new TableRow.LayoutParams(width, height));
 		linearLayout.addView(adapter.getView(-1, -1, linearLayout));
 		headerLinearLayout.addView(linearLayout);
 		fillRow();
@@ -204,11 +207,14 @@ public class TableFixHeaders extends LinearLayout {
 
 	private void fillRow() {
 		final int count = adapter.getColumnCount();
+		final int height = adapter.getHeight(-1);
 		for (int i = 0; i < count; i++) {
+			final int width = adapter.getWidth(i);
+
 			LinearLayout linearLayout = new LinearLayout(context);
-			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(adapter.getWidth(i), adapter.getHeight(-1), adapter.getWidth(i)));
+			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height, width));
 			View view = adapter.getView(-1, i, linearLayout);
-			view.setMinimumWidth(adapter.getWidth(i));
+			view.setMinimumWidth(width);
 			linearLayout.addView(view);
 			headerRowLinearLayout.addView(linearLayout);
 		}
@@ -216,9 +222,12 @@ public class TableFixHeaders extends LinearLayout {
 
 	private void fillColumn() {
 		final int count = adapter.getRowCount();
+		final int width = adapter.getWidth(-1);
 		for (int i = 0; i < count; i++) {
+			final int height = adapter.getHeight(i);
+
 			LinearLayout linearLayout = new LinearLayout(context);
-			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(adapter.getWidth(-1), adapter.getHeight(i)));
+			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height));
 			linearLayout.addView(adapter.getView(i, -1, linearLayout));
 			headerColumnLinearLayout.addView(linearLayout);
 		}
@@ -227,9 +236,11 @@ public class TableFixHeaders extends LinearLayout {
 	private void fillBody() {
 		final int count = adapter.getRowCount();
 		for (int i = 0; i < count; i++) {
+			final int height = adapter.getHeight(i);
+
 			LinearLayout linearLayout = new LinearLayout(context);
 			linearLayout.setOrientation(LinearLayout.HORIZONTAL);
-			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, adapter.getHeight(i)));
+			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, height));
 			fillBodyRow(linearLayout, i);
 			bodyLinearLayout.addView(linearLayout);
 		}
@@ -237,11 +248,14 @@ public class TableFixHeaders extends LinearLayout {
 
 	private void fillBodyRow(LinearLayout linearLayoutParent, int row) {
 		final int count = adapter.getColumnCount();
+		final int height = adapter.getHeight(row);
 		for (int i = 0; i < count; i++) {
+			final int width = adapter.getWidth(i);
+
 			LinearLayout linearLayout = new LinearLayout(context);
-			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(adapter.getWidth(i), adapter.getHeight(row), adapter.getWidth(i)));
+			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height, width));
 			View view = adapter.getView(row, i, linearLayout);
-			view.setMinimumWidth(adapter.getWidth(i));
+			view.setMinimumWidth(width);
 			linearLayout.addView(view);
 			linearLayoutParent.addView(linearLayout);
 		}
