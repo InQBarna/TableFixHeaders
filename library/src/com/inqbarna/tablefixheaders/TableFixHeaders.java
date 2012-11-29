@@ -143,17 +143,17 @@ public class TableFixHeaders extends LinearLayout {
 	}
 
 	private void showShadows(int scrollX, int scrollY) {
-//		final int visibilityLeft = scrollX == 0 ? View.GONE : View.VISIBLE;
-//		final int visibilityRight = scrollX == maxScrollX ? View.GONE : View.VISIBLE;
-//		final int visibilityTop = scrollY == 0 ? View.GONE : View.VISIBLE;
-//		final int visibilityBottom = scrollY == maxScrollY ? View.GONE : View.VISIBLE;
-//
+		final int visibilityLeft = scrollX == 0 ? View.GONE : View.VISIBLE;
+		final int visibilityRight = scrollX == maxScrollX ? View.GONE : View.VISIBLE;
+		final int visibilityTop = scrollY == 0 ? View.GONE : View.VISIBLE;
+		final int visibilityBottom = scrollY == maxScrollY ? View.GONE : View.VISIBLE;
+
 //		findViewById(R.id.shadow_left_1).setVisibility(visibilityLeft);
 //		findViewById(R.id.shadow_left_2).setVisibility(visibilityLeft);
-//		findViewById(R.id.shadow_right).setVisibility(visibilityRight);
+		findViewById(R.id.shadow_right).setVisibility(visibilityRight);
 //		findViewById(R.id.shadow_top_1).setVisibility(visibilityTop);
 //		findViewById(R.id.shadow_top_2).setVisibility(visibilityTop);
-//		findViewById(R.id.shadow_bottom).setVisibility(visibilityBottom);
+		findViewById(R.id.shadow_bottom).setVisibility(visibilityBottom);
 	}
 
 	/**

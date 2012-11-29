@@ -1,51 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- FakeScrollView is a hack to avoid problems to know the real height of the views -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
-<com.inqbarna.tablefixheaders.FakeScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/scroll"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#f00"
-    android:fadingEdgeLength="0dip"
-    android:scrollbars="none" >
+    <!-- FakeScrollView is a hack to avoid problems to know the real height of the views -->
 
-    <TableLayout
-        android:id="@+id/root"
+    <com.inqbarna.tablefixheaders.FakeScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#f0f"
-        android:stretchColumns="1" >
+        android:fadingEdgeLength="0dip"
+        android:scrollbars="none" >
 
-        <TableRow>
+        <TableLayout
+            android:id="@+id/root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1" >
 
-            <LinearLayout
-                android:id="@+id/header_text"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
+            <TableRow>
 
-            <LinearLayout
-                android:id="@+id/header_row"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal" />
-        </TableRow>
+                <LinearLayout
+                    android:id="@+id/header_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
 
-        <TableRow android:background="#ff0" >
+                <LinearLayout
+                    android:id="@+id/header_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </TableRow>
 
-            <LinearLayout
-                android:id="@+id/header_column"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
+            <TableRow>
 
-            <LinearLayout
-                android:id="@+id/body"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#0ff"
-                android:orientation="vertical" />
-        </TableRow>
-    </TableLayout>
+                <LinearLayout
+                    android:id="@+id/header_column"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
 
-</com.inqbarna.tablefixheaders.FakeScrollView>
+                <LinearLayout
+                    android:id="@+id/body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </TableRow>
+        </TableLayout>
+    </com.inqbarna.tablefixheaders.FakeScrollView>
+
+    <View
+        android:id="@+id/shadow_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/shadow_size"
+        android:layout_gravity="bottom"
+        android:background="@drawable/shadow_bottom"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/shadow_right"
+        android:layout_width="@dimen/shadow_size"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:background="@drawable/shadow_right"
+        android:visibility="gone" />
+
+</FrameLayout>
