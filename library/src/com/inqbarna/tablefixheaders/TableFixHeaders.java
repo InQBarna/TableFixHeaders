@@ -111,24 +111,24 @@ public class TableFixHeaders extends LinearLayout {
 			case MotionEvent.ACTION_MOVE: {
 				int x2 = (int) event.getRawX();
 				int y2 = (int) event.getRawY();
-				int scrollX = currentX - x2;
-				int scrollY = currentY - y2;
+				int scrollX = currentX - x2 + bodyLinearLayout.getScrollX();
+				int scrollY = currentY - y2 + bodyLinearLayout.getScrollY();
 				currentX = x2;
 				currentY = y2;
 
-				maxScrollX = bodyLinearLayout.getWidth() - (scrollView.getWidth() - headerColumnLinearLayout.getWidth());
-				maxScrollY = bodyLinearLayout.getHeight() - (scrollView.getHeight() - headerRowLinearLayout.getHeight());
-
-				if (scrollX < 0) {
-					scrollX = Math.max(scrollX + bodyLinearLayout.getScrollX(), 0);
-				} else {
-					scrollX = Math.min(scrollX + bodyLinearLayout.getScrollX(), maxScrollX);
-				}
-				if (scrollY < 0) {
-					scrollY = Math.max(scrollY + bodyLinearLayout.getScrollY(), 0);
-				} else {
-					scrollY = Math.min(scrollY + bodyLinearLayout.getScrollY(), maxScrollY);
-				}
+//				maxScrollX = bodyLinearLayout.getWidth() - (scrollView.getWidth() - headerColumnLinearLayout.getWidth());
+//				maxScrollY = bodyLinearLayout.getHeight() - (scrollView.getHeight() - headerRowLinearLayout.getHeight());
+//
+//				if (scrollX < 0) {
+//					scrollX = Math.max(scrollX, 0);
+//				} else {
+//					scrollX = Math.min(scrollX, maxScrollX);
+//				}
+//				if (scrollY < 0) {
+//					scrollY = Math.max(scrollY, 0);
+//				} else {
+//					scrollY = Math.min(scrollY, maxScrollY);
+//				}
 
 				headerRowLinearLayout.scrollTo(scrollX, 0);
 				headerColumnLinearLayout.scrollTo(0, scrollY);
@@ -143,17 +143,17 @@ public class TableFixHeaders extends LinearLayout {
 	}
 
 	private void showShadows(int scrollX, int scrollY) {
-		final int visibilityLeft = scrollX == 0 ? View.GONE : View.VISIBLE;
-		final int visibilityRight = scrollX == maxScrollX ? View.GONE : View.VISIBLE;
-		final int visibilityTop = scrollY == 0 ? View.GONE : View.VISIBLE;
-		final int visibilityBottom = scrollY == maxScrollY ? View.GONE : View.VISIBLE;
-
-		findViewById(R.id.shadow_left_1).setVisibility(visibilityLeft);
-		findViewById(R.id.shadow_left_2).setVisibility(visibilityLeft);
-		findViewById(R.id.shadow_right).setVisibility(visibilityRight);
-		findViewById(R.id.shadow_top_1).setVisibility(visibilityTop);
-		findViewById(R.id.shadow_top_2).setVisibility(visibilityTop);
-		findViewById(R.id.shadow_bottom).setVisibility(visibilityBottom);
+//		final int visibilityLeft = scrollX == 0 ? View.GONE : View.VISIBLE;
+//		final int visibilityRight = scrollX == maxScrollX ? View.GONE : View.VISIBLE;
+//		final int visibilityTop = scrollY == 0 ? View.GONE : View.VISIBLE;
+//		final int visibilityBottom = scrollY == maxScrollY ? View.GONE : View.VISIBLE;
+//
+//		findViewById(R.id.shadow_left_1).setVisibility(visibilityLeft);
+//		findViewById(R.id.shadow_left_2).setVisibility(visibilityLeft);
+//		findViewById(R.id.shadow_right).setVisibility(visibilityRight);
+//		findViewById(R.id.shadow_top_1).setVisibility(visibilityTop);
+//		findViewById(R.id.shadow_top_2).setVisibility(visibilityTop);
+//		findViewById(R.id.shadow_bottom).setVisibility(visibilityBottom);
 	}
 
 	/**
@@ -166,13 +166,13 @@ public class TableFixHeaders extends LinearLayout {
 	 */
 	public void setAdapter(TableAdapter adapter) {
 		this.adapter = adapter;
-		
+
 		if (adapter instanceof TableAdapter.Observable) {
-			((TableAdapter.Observable)this.adapter).registerDataSetObserver(new DataSetObserver() {
+			((TableAdapter.Observable) this.adapter).registerDataSetObserver(new DataSetObserver() {
 
 				/**
 				 * This overrides onChanged
-				 *
+				 * 
 				 * @see android.database.DataSetObserver#onChanged()
 				 */
 				@Override
@@ -206,8 +206,10 @@ public class TableFixHeaders extends LinearLayout {
 		final int count = adapter.getColumnCount();
 		for (int i = 0; i < count; i++) {
 			LinearLayout linearLayout = new LinearLayout(context);
-			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(adapter.getWidth(i), adapter.getHeight(-1)));
-			linearLayout.addView(adapter.getView(-1, i, linearLayout));
+			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(adapter.getWidth(i), adapter.getHeight(-1), adapter.getWidth(i)));
+			View view = adapter.getView(-1, i, linearLayout);
+			view.setMinimumWidth(adapter.getWidth(i));
+			linearLayout.addView(view);
 			headerRowLinearLayout.addView(linearLayout);
 		}
 	}
@@ -237,8 +239,10 @@ public class TableFixHeaders extends LinearLayout {
 		final int count = adapter.getColumnCount();
 		for (int i = 0; i < count; i++) {
 			LinearLayout linearLayout = new LinearLayout(context);
-			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(adapter.getWidth(i), adapter.getHeight(row)));
-			linearLayout.addView(adapter.getView(row, i, linearLayout));
+			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(adapter.getWidth(i), adapter.getHeight(row), adapter.getWidth(i)));
+			View view = adapter.getView(row, i, linearLayout);
+			view.setMinimumWidth(adapter.getWidth(i));
+			linearLayout.addView(view);
 			linearLayoutParent.addView(linearLayout);
 		}
 	}
