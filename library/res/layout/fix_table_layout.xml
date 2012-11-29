@@ -3,15 +3,18 @@
 
 <com.inqbarna.tablefixheaders.FakeScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scroll"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#f00"
     android:fadingEdgeLength="0dip"
     android:scrollbars="none" >
 
     <TableLayout
         android:id="@+id/root"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f0f"
+        android:stretchColumns="1" >
 
         <TableRow>
 
@@ -28,7 +31,7 @@
                 android:orientation="horizontal" />
         </TableRow>
 
-        <TableRow>
+        <TableRow android:background="#ff0" >
 
             <LinearLayout
                 android:id="@+id/header_column"
@@ -40,6 +43,7 @@
                 android:id="@+id/body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#0ff"
                 android:orientation="vertical" />
         </TableRow>
     </TableLayout>
