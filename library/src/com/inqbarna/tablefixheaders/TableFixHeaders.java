@@ -109,8 +109,8 @@ public class TableFixHeaders extends LinearLayout {
 				break;
 			}
 			case MotionEvent.ACTION_MOVE: {
-				int x2 = (int) event.getRawX();
-				int y2 = (int) event.getRawY();
+				final int x2 = (int) event.getRawX();
+				final int y2 = (int) event.getRawY();
 				int scrollX = currentX - x2 + bodyLinearLayout.getScrollX();
 				int scrollY = currentY - y2 + bodyLinearLayout.getScrollY();
 				currentX = x2;
