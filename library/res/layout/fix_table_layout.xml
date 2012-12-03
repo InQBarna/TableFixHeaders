@@ -69,7 +69,7 @@
                         android:visibility="gone" />
                 </FrameLayout>
 
-                <FrameLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
 
@@ -83,7 +83,9 @@
                         android:id="@+id/shadow_left_2"
                         android:layout_width="@dimen/shadow_size"
                         android:layout_height="match_parent"
-                        android:layout_gravity="left"
+                        android:layout_alignBottom="@id/body"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignTop="@id/body"
                         android:background="@drawable/shadow_left"
                         android:visibility="gone" />
 
@@ -91,10 +93,10 @@
                         android:id="@+id/shadow_top_2"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/shadow_size"
-                        android:layout_gravity="top"
+                        android:layout_alignParentTop="true"
                         android:background="@drawable/shadow_top"
                         android:visibility="gone" />
-                </FrameLayout>
+                </RelativeLayout>
             </TableRow>
         </TableLayout>
     </com.inqbarna.tablefixheaders.FakeScrollView>
