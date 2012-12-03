@@ -38,6 +38,13 @@ public class TableFixHeaders extends LinearLayout {
 	private int maxScrollX;
 	private int maxScrollY;
 
+	private View shadowLeft1;
+	private View shadowLeft2;
+	private View shadowRight;
+	private View shadowTop1;
+	private View shadowTop2;
+	private View shadowBottom;
+
 	/**
 	 * Simple constructor to use when creating a view from code.
 	 * 
@@ -76,6 +83,13 @@ public class TableFixHeaders extends LinearLayout {
 		headerRowLinearLayout = (LinearLayout) findViewById(R.id.header_row);
 		headerColumnLinearLayout = (LinearLayout) findViewById(R.id.header_column);
 		bodyLinearLayout = (LinearLayout) findViewById(R.id.body);
+
+		shadowLeft1 = findViewById(R.id.shadow_left_1);
+		shadowLeft2 = findViewById(R.id.shadow_left_2);
+		shadowRight = findViewById(R.id.shadow_right);
+		shadowTop1 = findViewById(R.id.shadow_top_1);
+		shadowTop2 = findViewById(R.id.shadow_top_2);
+		shadowBottom = findViewById(R.id.shadow_bottom);
 	}
 
 	@Override
@@ -148,12 +162,12 @@ public class TableFixHeaders extends LinearLayout {
 		final int visibilityTop = scrollY == 0 ? View.GONE : View.VISIBLE;
 		final int visibilityBottom = scrollY == maxScrollY ? View.GONE : View.VISIBLE;
 
-		findViewById(R.id.shadow_left_1).setVisibility(visibilityLeft);
-		findViewById(R.id.shadow_left_2).setVisibility(visibilityLeft);
-		findViewById(R.id.shadow_right).setVisibility(visibilityRight);
-		findViewById(R.id.shadow_top_1).setVisibility(visibilityTop);
-		findViewById(R.id.shadow_top_2).setVisibility(visibilityTop);
-		findViewById(R.id.shadow_bottom).setVisibility(visibilityBottom);
+		shadowLeft1.setVisibility(visibilityLeft);
+		shadowLeft2.setVisibility(visibilityLeft);
+		shadowRight.setVisibility(visibilityRight);
+		shadowTop1.setVisibility(visibilityTop);
+		shadowTop2.setVisibility(visibilityTop);
+		shadowBottom.setVisibility(visibilityBottom);
 	}
 
 	/**
