@@ -6,7 +6,6 @@
     <!-- FakeScrollView is a hack to avoid problems to know the real height of the views -->
 
     <com.inqbarna.tablefixheaders.FakeScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
