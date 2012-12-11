@@ -4,6 +4,7 @@ import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -198,7 +199,18 @@ public class TableFixHeaders extends LinearLayout {
 
 		onDataChange();
 
-		showShadows(0, 0);
+		// FIXME: HACK I do not know how to measure the view before it is included in the parent view.
+		Handler handler = new Handler(context.getMainLooper());
+		handler.postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				maxScrollX = bodyLinearLayout.getWidth() - (scrollView.getWidth() - headerColumnLinearLayout.getWidth());
+				maxScrollY = bodyLinearLayout.getHeight() - (scrollView.getHeight() - headerRowLinearLayout.getHeight());
+
+				showShadows(0, 0);
+			}
+		}, 35);
 	}
 
 	public void onDataChange() {
