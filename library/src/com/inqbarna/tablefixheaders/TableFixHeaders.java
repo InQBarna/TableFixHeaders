@@ -102,8 +102,8 @@ public class TableFixHeaders extends LinearLayout {
 				break;
 			}
 			case MotionEvent.ACTION_MOVE: {
-				int x2 = (int) (currentX - event.getRawX());
-				int y2 = (int) (currentY - event.getRawY());
+				int x2 = currentX - (int) event.getRawX();
+				int y2 = currentY - (int) event.getRawY();
 				if (x2 < -CLICK_SENSIVILITY || x2 > CLICK_SENSIVILITY || y2 < -CLICK_SENSIVILITY || y2 > CLICK_SENSIVILITY) {
 					intercept = true;
 				}
