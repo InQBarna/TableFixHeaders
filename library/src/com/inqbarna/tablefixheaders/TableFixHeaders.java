@@ -201,7 +201,7 @@ public class TableFixHeaders extends LinearLayout {
 		showShadows(0, 0);
 	}
 
-	private void onDataChange() {
+	public void onDataChange() {
 		headerLinearLayout.removeAllViews();
 		headerRowLinearLayout.removeAllViews();
 		headerColumnLinearLayout.removeAllViews();
