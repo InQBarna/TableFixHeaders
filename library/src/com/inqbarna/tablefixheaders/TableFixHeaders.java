@@ -42,12 +42,12 @@ public class TableFixHeaders extends LinearLayout {
 	private int maxScrollX;
 	private int maxScrollY;
 
-	private View shadowLeft1;
-	private View shadowLeft2;
-	private View shadowRight;
-	private View shadowTop1;
-	private View shadowTop2;
-	private View shadowBottom;
+	private final View shadowLeft1;
+	private final View shadowLeft2;
+	private final View shadowRight;
+	private final View shadowTop1;
+	private final View shadowTop2;
+	private final View shadowBottom;
 
 	private final float shadowSmoothingDip;
 
