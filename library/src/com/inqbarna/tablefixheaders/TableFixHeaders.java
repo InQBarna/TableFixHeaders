@@ -2,6 +2,7 @@ package com.inqbarna.tablefixheaders;
 
 import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObserver;
 import android.os.Build;
@@ -164,6 +165,7 @@ public class TableFixHeaders extends LinearLayout {
 		return true;
 	}
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void showShadows(int scrollX, int scrollY) {
 		final int visibilityLeft = scrollX == 0 ? View.GONE : View.VISIBLE;
 		final int visibilityRight = scrollX == maxScrollX ? View.GONE : View.VISIBLE;
@@ -177,7 +179,7 @@ public class TableFixHeaders extends LinearLayout {
 		shadowTop2.setVisibility(visibilityTop);
 		shadowBottom.setVisibility(visibilityBottom);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) { // 11
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) { // API 11
 			final float alphaLeft = scrollX <= shadowSmoothingDip ? scrollX / shadowSmoothingDip : 1f;
 			final float alphaRight = maxScrollX - scrollX <= shadowSmoothingDip ? (maxScrollX - scrollX) / shadowSmoothingDip : 1f;
 			final float alphaTop = scrollY <= shadowSmoothingDip ? scrollY / shadowSmoothingDip : 1f;
