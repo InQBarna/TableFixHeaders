@@ -1,15 +1,29 @@
 package com.inqbarna.tablefixheaders;
 
+import java.util.List;
+
 import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
 public class TableFixHeaders2 extends ViewGroup {
+	private final static int CLICK_SENSIVILITY = 2;
+
+	private int currentX;
+	private int currentY;
 
 	private TableAdapter adapter;
+	private int scrollX = 15;
+	private int scrollY = 15;
+
+	private View head;
+	private List<View> row;
+	private List<View> column;
+	private List<List<View>> table;
 
 	public TableFixHeaders2(Context context) {
 		super(context);
@@ -25,7 +39,32 @@ public class TableFixHeaders2 extends ViewGroup {
 
 	public void setAdapter(TableAdapter adapter) {
 		this.adapter = adapter;
-		invalidate();
+
+		requestLayout();
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// Idea: http://stackoverflow.com/a/4991692/842697
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN: {
+				currentX = (int) event.getRawX();
+				currentY = (int) event.getRawY();
+				break;
+			}
+			case MotionEvent.ACTION_MOVE: {
+				final int x2 = (int) event.getRawX();
+				final int y2 = (int) event.getRawY();
+				scrollX += currentX - x2;
+				scrollY += currentY - y2;
+				currentX = x2;
+				currentY = y2;
+
+				requestLayout();
+				break;
+			}
+		}
+		return true;
 	}
 
 	@Override
@@ -97,7 +136,16 @@ public class TableFixHeaders2 extends ViewGroup {
 				view.measure(MeasureSpec.makeMeasureSpec(widths[j + 1], MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heights[i + 1], MeasureSpec.EXACTLY));
 				addView(view);
 				nextW = w + widths[j + 1];
-				view.layout(w, h, nextW, nextH);
+				int a[] = { w, h, nextW, nextH };
+				if (i != -1) {
+					a[1] -= scrollY;
+					a[3] -= scrollY;
+				}
+				if (j != -1) {
+					a[0] -= scrollX;
+					a[2] -= scrollX;
+				}
+				view.layout(a[0], a[1], a[2], a[3]);
 				w = nextW;
 			}
 			h = nextH;
