@@ -142,15 +142,19 @@ public class TableFixHeaders extends LinearLayout {
 				maxScrollX = bodyLinearLayout.getWidth() - (scrollView.getWidth() - headerColumnLinearLayout.getWidth());
 				maxScrollY = bodyLinearLayout.getHeight() - (scrollView.getHeight() - headerRowLinearLayout.getHeight());
 
-				if (scrollX < 0) {
-					scrollX = Math.max(scrollX, 0);
-				} else {
-					scrollX = Math.min(scrollX, maxScrollX);
+				if (scrollX != 0) {
+					if (scrollX < 0) {
+						scrollX = Math.max(scrollX, 0);
+					} else {
+						scrollX = Math.min(scrollX, maxScrollX);
+					}
 				}
-				if (scrollY < 0) {
-					scrollY = Math.max(scrollY, 0);
-				} else {
-					scrollY = Math.min(scrollY, maxScrollY);
+				if (scrollY != 0) {
+					if (scrollY < 0) {
+						scrollY = Math.max(scrollY, 0);
+					} else {
+						scrollY = Math.min(scrollY, maxScrollY);
+					}
 				}
 
 				headerRowLinearLayout.scrollTo(scrollX, 0);
