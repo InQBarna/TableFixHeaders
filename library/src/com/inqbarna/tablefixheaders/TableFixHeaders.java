@@ -183,7 +183,7 @@ public class TableFixHeaders extends LinearLayout {
 			final float alphaLeft = scrollX <= shadowSmoothingPixels ? scrollX / shadowSmoothingPixels : 1f;
 			final float alphaRight = maxScrollX - scrollX <= shadowSmoothingPixels ? (maxScrollX - scrollX) / shadowSmoothingPixels : 1f;
 			final float alphaTop = scrollY <= shadowSmoothingPixels ? scrollY / shadowSmoothingPixels : 1f;
-			final float alphaBottom = scrollY - maxScrollY <= shadowSmoothingPixels ? (maxScrollY - scrollY) / shadowSmoothingPixels : 1f;
+			final float alphaBottom = maxScrollY - scrollY <= shadowSmoothingPixels ? (maxScrollY - scrollY) / shadowSmoothingPixels : 1f;
 
 			shadowLeft1.setAlpha(alphaLeft);
 			shadowLeft2.setAlpha(alphaLeft);
