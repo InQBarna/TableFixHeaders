@@ -11,9 +11,9 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TableRow;
 
 /**
  * This view shows a table which can scroll in both directions. Also still
@@ -242,13 +242,13 @@ public class TableFixHeaders extends LinearLayout {
 		headerColumnLinearLayout.removeAllViews();
 		bodyLinearLayout.removeAllViews();
 
-		LinearLayout linearLayout = new LinearLayout(context);
 		final int width = adapter.getWidth(-1);
 		final int height = adapter.getHeight(-1);
 
-		linearLayout.setLayoutParams(new TableRow.LayoutParams(width, height));
-		linearLayout.addView(adapter.getView(-1, -1, linearLayout));
-		headerLinearLayout.addView(linearLayout);
+		final View view = adapter.getView(-1, -1, headerLinearLayout);
+		setupView(view, width, height, -1);
+
+		headerLinearLayout.addView(view);
 		fillRow();
 		fillColumn();
 		fillBody();
@@ -260,12 +260,10 @@ public class TableFixHeaders extends LinearLayout {
 		for (int i = 0; i < count; i++) {
 			final int width = adapter.getWidth(i);
 
-			LinearLayout linearLayout = new LinearLayout(context);
-			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height, width));
-			View view = adapter.getView(-1, i, linearLayout);
-			view.setMinimumWidth(width);
-			linearLayout.addView(view);
-			headerRowLinearLayout.addView(linearLayout);
+			final View view = adapter.getView(-1, i, headerRowLinearLayout);
+			setupView(view, width, height, width);
+
+			headerRowLinearLayout.addView(view);
 		}
 	}
 
@@ -275,10 +273,10 @@ public class TableFixHeaders extends LinearLayout {
 		for (int i = 0; i < count; i++) {
 			final int height = adapter.getHeight(i);
 
-			LinearLayout linearLayout = new LinearLayout(context);
-			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height));
-			linearLayout.addView(adapter.getView(i, -1, linearLayout));
-			headerColumnLinearLayout.addView(linearLayout);
+			final View view = adapter.getView(i, -1, headerColumnLinearLayout);
+			setupView(view, width, height, -1);
+
+			headerColumnLinearLayout.addView(view);
 		}
 	}
 
@@ -301,12 +299,28 @@ public class TableFixHeaders extends LinearLayout {
 		for (int i = 0; i < count; i++) {
 			final int width = adapter.getWidth(i);
 
-			LinearLayout linearLayout = new LinearLayout(context);
-			linearLayout.setLayoutParams(new LinearLayout.LayoutParams(width, height, width));
-			View view = adapter.getView(row, i, linearLayout);
-			view.setMinimumWidth(width);
-			linearLayout.addView(view);
-			linearLayoutParent.addView(linearLayout);
+			final View view = adapter.getView(row, i, linearLayoutParent);
+			setupView(view, width, height, width);
+
+			linearLayoutParent.addView(view);
 		}
+	}
+
+	private void setupView(View view, int width, int height, int weight) {
+		ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+
+		if (layoutParams == null) {
+			layoutParams = new LinearLayout.LayoutParams(width, height, weight);
+		} else {
+			if (!(layoutParams instanceof LinearLayout.LayoutParams)) {
+				layoutParams = new LinearLayout.LayoutParams(layoutParams);
+			}
+			layoutParams.width = width;
+			layoutParams.height = height;
+			((LinearLayout.LayoutParams) layoutParams).weight = weight;
+		}
+		view.setLayoutParams(layoutParams);
+
+		view.setMinimumWidth(width);
 	}
 }
