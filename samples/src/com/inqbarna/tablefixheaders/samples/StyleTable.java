@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.inqbarna.tablefixheaders.TableFixHeaders;
+import com.inqbarna.tablefixheaders.TableFixHeaders2;
 import com.inqbarna.tablefixheaders.samples.adapters.BaseTableAdapter;
 
 public class StyleTable extends Activity {
@@ -15,7 +16,7 @@ public class StyleTable extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.table);
 
-		TableFixHeaders tableFixHeaders = (TableFixHeaders) findViewById(R.id.table);
+		TableFixHeaders2 tableFixHeaders = (TableFixHeaders2) findViewById(R.id.table);
 		tableFixHeaders.setAdapter(new MyAdapter(this));
 	}
 
@@ -35,12 +36,12 @@ public class StyleTable extends Activity {
 
 		@Override
 		public int getRowCount() {
-			return 25;
+			return 3;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return 7;
+			return 3;
 		}
 
 		@Override
