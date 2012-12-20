@@ -50,7 +50,7 @@ public class TableFixHeaders extends LinearLayout {
 	private final View shadowTop2;
 	private final View shadowBottom;
 
-	private final float shadowSmoothingDip;
+	private final float shadowSmoothingPixels;
 
 	/**
 	 * Simple constructor to use when creating a view from code.
@@ -98,7 +98,7 @@ public class TableFixHeaders extends LinearLayout {
 		shadowTop2 = findViewById(R.id.shadow_top_2);
 		shadowBottom = findViewById(R.id.shadow_bottom);
 
-		shadowSmoothingDip = getResources().getDisplayMetrics().density * SHADOW_SMOOTHING_DIP;
+		shadowSmoothingPixels = getResources().getDisplayMetrics().density * SHADOW_SMOOTHING_DIP;
 	}
 
 	@Override
@@ -180,10 +180,10 @@ public class TableFixHeaders extends LinearLayout {
 		shadowBottom.setVisibility(visibilityBottom);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) { // API 11
-			final float alphaLeft = scrollX <= shadowSmoothingDip ? scrollX / shadowSmoothingDip : 1f;
-			final float alphaRight = maxScrollX - scrollX <= shadowSmoothingDip ? (maxScrollX - scrollX) / shadowSmoothingDip : 1f;
-			final float alphaTop = scrollY <= shadowSmoothingDip ? scrollY / shadowSmoothingDip : 1f;
-			final float alphaBottom = (scrollY - maxScrollY) <= shadowSmoothingDip ? (scrollY - maxScrollY) / shadowSmoothingDip : 1f;
+			final float alphaLeft = scrollX <= shadowSmoothingPixels ? scrollX / shadowSmoothingPixels : 1f;
+			final float alphaRight = maxScrollX - scrollX <= shadowSmoothingPixels ? (maxScrollX - scrollX) / shadowSmoothingPixels : 1f;
+			final float alphaTop = scrollY <= shadowSmoothingPixels ? scrollY / shadowSmoothingPixels : 1f;
+			final float alphaBottom = (scrollY - maxScrollY) <= shadowSmoothingPixels ? (scrollY - maxScrollY) / shadowSmoothingPixels : 1f;
 
 			shadowLeft1.setAlpha(alphaLeft);
 			shadowLeft2.setAlpha(alphaLeft);
