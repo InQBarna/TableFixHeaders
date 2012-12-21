@@ -165,7 +165,7 @@ public class TableFixHeaders2 extends ViewGroup {
 
 	private void makeAndSetup(int row, int column, int left, int top, int right, int bottom) {
 		final View view = adapter.getView(row, column, this);
-		view.measure(MeasureSpec.makeMeasureSpec(left - right, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(top - bottom, MeasureSpec.EXACTLY));
+		view.measure(MeasureSpec.makeMeasureSpec(right - left, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(bottom - top, MeasureSpec.EXACTLY));
 		addTableView(view, row, column);
 		view.layout(left, top, right, bottom);
 	}
