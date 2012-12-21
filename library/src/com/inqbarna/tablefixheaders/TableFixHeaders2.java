@@ -8,9 +8,12 @@ import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.RecyclerListener;
 
 public class TableFixHeaders2 extends ViewGroup {
 	private final static int CLICK_SENSIVILITY = 2;
@@ -39,6 +42,8 @@ public class TableFixHeaders2 extends ViewGroup {
 
 	private int height;
 
+	private Recycler recycler;
+
 	public TableFixHeaders2(Context context) {
 		this(context, null);
 	}
@@ -64,6 +69,8 @@ public class TableFixHeaders2 extends ViewGroup {
 
 	public void setAdapter(TableAdapter adapter) {
 		this.adapter = adapter;
+
+		this.recycler = new Recycler(adapter.getViewTypeCount());
 
 		this.rowCount = adapter.getRowCount();
 		this.columnCount = adapter.getColumnCount();
@@ -108,50 +115,50 @@ public class TableFixHeaders2 extends ViewGroup {
 				} else if (scrollY < 0) {
 					scrollY = Math.max(scrollY, -sumArray(heights, 1, firstRow));
 				} else {
-					scrollY = Math.min(scrollY, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height);
+					scrollY = Math.min(scrollY, Math.max(0, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height));
 				}
 
 				// add or remove views
-				while (widths[firstColumn] < scrollX) {
-					removeLeft();
-					scrollX -= widths[firstColumn];
-					firstColumn++;
-				}
-				while (0 > scrollX) {
-					addLeft();
-					firstColumn--;
-					scrollX += widths[firstColumn];
-				}
-
-				while (heights[firstColumn] < scrollY) {
-					removeTop();
-					scrollY -= heights[firstRow];
-					firstRow++;
-				}
-				while (0 > scrollY) {
-					addTop();
-					firstRow--;
-					scrollY += heights[firstRow];
-				}
-
-				int filledWidth = getFilledWidth();
-				while (filledWidth < width) {
-					addRight();
-					filledWidth = getFilledWidth();
-				}
-				while (filledWidth - widths[firstColumn + rowViewList.size() - 1] >= width) {
-					removeRight();
-					filledWidth = getFilledWidth();
+				if (scrollX == 0) {
+				} else if (scrollX > 0) {
+					while (widths[firstColumn] < scrollX) {
+						removeLeft();
+						scrollX -= widths[firstColumn];
+						firstColumn++;
+					}
+					while (getFilledWidth() < width) {
+						addRight();
+					}
+				} else {
+					while (getFilledWidth() - widths[firstColumn + rowViewList.size() - 1] >= width) {
+						removeRight();
+					}
+					while (0 > scrollX) {
+						addLeft();
+						firstColumn--;
+						scrollX += widths[firstColumn];
+					}
 				}
 
-				int filledHeight = getFilledHeight();
-				while (filledHeight < height) {
-					addBottom();
-					filledHeight = getFilledHeight();
-				}
-				while (filledHeight - heights[firstRow + columnViewList.size() - 1] >= height) {
-					removeBottom();
-					filledHeight = getFilledHeight();
+				if (scrollY == 0) {
+				} else if (scrollY > 0) {
+					while (heights[firstColumn] < scrollY) {
+						removeTop();
+						scrollY -= heights[firstRow];
+						firstRow++;
+					}
+					while (getFilledHeight() < height) {
+						addBottom();
+					}
+				} else {
+					while (getFilledHeight() - heights[firstRow + columnViewList.size() - 1] >= height) {
+						removeBottom();
+					}
+					while (0 > scrollY) {
+						addTop();
+						firstRow--;
+						scrollY += heights[firstRow];
+					}
 				}
 
 				repositionViews();
@@ -162,7 +169,6 @@ public class TableFixHeaders2 extends ViewGroup {
 	}
 
 	private int getFilledWidth() {
-		System.out.println(widths[0] + " + " + sumArray(widths, firstColumn + 1, rowViewList.size()) + " - " + scrollX);
 		return widths[0] + sumArray(widths, firstColumn + 1, rowViewList.size()) - scrollX;
 	}
 
@@ -181,7 +187,7 @@ public class TableFixHeaders2 extends ViewGroup {
 	}
 
 	private void addRight() {
-		System.out.println("addRight" + (firstColumn + rowViewList.size()));
+		System.out.println("addRight");
 		final int size = rowViewList.size();
 		addLeftOrRight(firstColumn + size, size);
 	}
@@ -250,6 +256,13 @@ public class TableFixHeaders2 extends ViewGroup {
 		for (View view : remove) {
 			removeView(view);
 		}
+	}
+
+	@Override
+	public void removeView(View view) {
+		super.removeView(view);
+
+		recycler.addRecycledView(view, 0);
 	}
 
 	private void repositionViews() {
@@ -399,7 +412,7 @@ public class TableFixHeaders2 extends ViewGroup {
 	}
 
 	private View makeView(int row, int column, int w, int h) {
-		final View view = adapter.getView(row, column, this);
+		final View view = adapter.getView(row, column, recycler.getRecycledView(adapter.getItemViewType(row, column)), this);
 		view.measure(MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY));
 		addTableView(view, row, column);
 		return view;

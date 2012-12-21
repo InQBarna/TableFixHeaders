@@ -1,6 +1,5 @@
 package com.inqbarna.tablefixheaders.samples.adapters;
 
-
 import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 
 import android.content.Context;
@@ -52,7 +51,7 @@ public abstract class BaseTableAdapter implements TableAdapter {
 	}
 
 	@Override
-	public View getView(int row, int column, ViewGroup parent) {
+	public View getView(int row, int column, View converView, ViewGroup parent) {
 		final View view = inflater.inflate(getLayoutResource(row, column), parent, false);
 		setText(view, getCellString(row, column));
 		return view;

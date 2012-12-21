@@ -50,14 +50,12 @@ public class MatrixTableAdapter<T> implements TableAdapter {
 	}
 
 	@Override
-	public View getView(int row, int column, ViewGroup parent) {
-		return generateView(table[row + 1][column + 1]);
-	}
-
-	private TextView generateView(T item) {
-		final TextView textView = new TextView(context);
-		textView.setText(item.toString());
-		return textView;
+	public View getView(int row, int column, View convertView, ViewGroup parent) {
+		if (convertView == null) {
+			convertView = new TextView(context);
+		}
+		((TextView) convertView).setText(table[row + 1][column + 1].toString());
+		return convertView;
 	}
 
 	@Override
@@ -68,5 +66,15 @@ public class MatrixTableAdapter<T> implements TableAdapter {
 	@Override
 	public int getWidth(int column) {
 		return width;
+	}
+
+	@Override
+	public int getItemViewType(int row, int column) {
+		return 0;
+	}
+
+	@Override
+	public int getViewTypeCount() {
+		return 1;
 	}
 }

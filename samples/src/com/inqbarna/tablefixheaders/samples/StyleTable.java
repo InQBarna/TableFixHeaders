@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 
-import com.inqbarna.tablefixheaders.TableFixHeaders;
 import com.inqbarna.tablefixheaders.TableFixHeaders2;
 import com.inqbarna.tablefixheaders.samples.adapters.BaseTableAdapter;
 
@@ -36,12 +35,12 @@ public class StyleTable extends Activity {
 
 		@Override
 		public int getRowCount() {
-			return 3;
+			return 10;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return 3;
+			return 5;
 		}
 
 		@Override
@@ -66,6 +65,16 @@ public class StyleTable extends Activity {
 			} else {
 				return R.layout.item_table1;
 			}
+		}
+
+		@Override
+		public int getItemViewType(int row, int column) {
+			return 0;
+		}
+
+		@Override
+		public int getViewTypeCount() {
+			return 1;
 		}
 	}
 }

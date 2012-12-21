@@ -1,7 +1,5 @@
 package com.inqbarna.tablefixheaders.adapters;
 
-import com.inqbarna.tablefixheaders.TableFixHeaders;
-
 import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,7 @@ import android.view.ViewGroup;
  * set.
  * 
  * @author Brais Gabín
- * @see TableFixHeaders
+ * @see TableFixHeaders2
  */
 public interface TableAdapter {
 
@@ -48,7 +46,7 @@ public interface TableAdapter {
 	 *            The parent that this view will eventually be attached to.
 	 * @return A View corresponding to the data at the specified row and column.
 	 */
-	public View getView(int row, int column, ViewGroup parent);
+	public View getView(int row, int column, View converView, ViewGroup parent);
 
 	/**
 	 * Return the width of the column.
@@ -67,23 +65,23 @@ public interface TableAdapter {
 	 * @return The height of the row, in pixels.
 	 */
 	public int getHeight(int row);
-	
+
 	/**
-	 * Implement these methods to allow a client application class to
-	 * if you want {@link TableFixHeaders} to attach to your Custom implementation
-	 * of {@link TableAdapter}
+	 * Implement these methods to allow a client application class to if you
+	 * want {@link TableFixHeaders2} to attach to your Custom implementation of
+	 * {@link TableAdapter}
 	 * 
 	 * @author David García <david.garcia@inqbarna.com>
-	 *
+	 * 
 	 */
 	public interface Observable {
 
 		/**
 		 * Register an observer within this adapter.
 		 * 
-		 * If you are implementing this interface {@link TableFixHeaders} will call this
-		 * method to register a {@link DataSetObserver} that should be notified
-		 * of data changes
+		 * If you are implementing this interface {@link TableFixHeaders2} will
+		 * call this method to register a {@link DataSetObserver} that should be
+		 * notified of data changes
 		 * 
 		 * @param observer
 		 *            The observer instance
@@ -93,9 +91,9 @@ public interface TableAdapter {
 		/**
 		 * Unregister an observer from this adapter.
 		 * 
-		 * If you are implementing this interface {@link TableFixHeaders} will call this
-		 * method to un-register a {@link DataSetObserver} to stop receiving
-		 * notifications.
+		 * If you are implementing this interface {@link TableFixHeaders2} will
+		 * call this method to un-register a {@link DataSetObserver} to stop
+		 * receiving notifications.
 		 * 
 		 * @param observer
 		 *            The observer instance
@@ -103,5 +101,9 @@ public interface TableAdapter {
 		public void unregisterDataSetObserver(DataSetObserver observer);
 
 	}
-	
+
+	public int getItemViewType(int row, int column);
+
+	public int getViewTypeCount();
+
 }
