@@ -19,8 +19,8 @@ public class TableFixHeaders2 extends ViewGroup {
 	private int currentY;
 
 	private TableAdapter adapter;
-	private int scrollX = 0;
-	private int scrollY = 0;
+	private int scrollX;
+	private int scrollY;
 	private int firstRow;
 	private int firstColumn;
 	private int[] widths;
@@ -45,6 +45,12 @@ public class TableFixHeaders2 extends ViewGroup {
 
 	public TableFixHeaders2(Context context, AttributeSet attrs) {
 		super(context, attrs);
+
+		this.firstRow = 0;
+		this.firstColumn = 0;
+
+		this.scrollX = 0;
+		this.scrollY = 0;
 
 		this.headView = null;
 		this.rowViewList = new ArrayList<View>();
@@ -90,22 +96,22 @@ public class TableFixHeaders2 extends ViewGroup {
 				currentX = x2;
 				currentY = y2;
 
-				if (firstColumn == 0 && scrollX < 0) {
-					scrollX = 0;
-				}
-				if (firstRow == 0 && scrollY < 0) {
-					scrollY = 0;
-				}
-				final int filledWidth = widths[0] + sumArray(widths, firstColumn, rowViewList.size());
-				if (filledWidth - scrollX < width && firstColumn + rowViewList.size() >= columnCount) {
-					scrollX = filledWidth - width;
-				}
-				final int filledHeight = heights[0] + sumArray(heights, firstRow, columnViewList.size());
-				if (filledHeight - scrollY < height && firstRow + columnViewList.size() >= rowCount) {
-					scrollY = filledHeight - height;
+				// scroll bounds
+				if (scrollX == 0) {
+				} else if (scrollX < 0) {
+					scrollX = Math.max(scrollX, -sumArray(widths, 1, firstColumn));
+				} else {
+					scrollX = Math.min(scrollX, sumArray(widths, firstColumn + 1, columnCount - firstColumn) + widths[0] - width);
 				}
 
-				boolean change = false;
+				if (scrollY == 0) {
+				} else if (scrollY < 0) {
+					scrollY = Math.max(scrollY, -sumArray(heights, 1, firstRow));
+				} else {
+					scrollY = Math.min(scrollY, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height);
+				}
+
+				// add or remove views
 				while (widths[firstColumn] < scrollX) {
 					removeLeft();
 					scrollX -= widths[firstColumn];
@@ -128,34 +134,62 @@ public class TableFixHeaders2 extends ViewGroup {
 					scrollY += heights[firstRow];
 				}
 
-				if (change) {
-					requestLayout();
-				} else {
-					System.out.println(scrollX + "/" + scrollY);
-					repositionViews();
+				int filledWidth = getFilledWidth();
+				while (filledWidth < width) {
+					addRight();
+					filledWidth = getFilledWidth();
 				}
+				while (filledWidth - widths[firstColumn + rowViewList.size() - 1] >= width) {
+					removeRight();
+					filledWidth = getFilledWidth();
+				}
+
+				int filledHeight = getFilledHeight();
+				while (filledHeight < height) {
+					addBottom();
+					filledHeight = getFilledHeight();
+				}
+				while (filledHeight - heights[firstRow + columnViewList.size() - 1] >= height) {
+					removeBottom();
+					filledHeight = getFilledHeight();
+				}
+
+				repositionViews();
 				break;
 			}
 		}
 		return true;
 	}
 
+	private int getFilledWidth() {
+		System.out.println(widths[0] + " + " + sumArray(widths, firstColumn + 1, rowViewList.size()) + " - " + scrollX);
+		return widths[0] + sumArray(widths, firstColumn + 1, rowViewList.size()) - scrollX;
+	}
+
+	private int getFilledHeight() {
+		return heights[0] + sumArray(heights, firstRow + 1, columnViewList.size()) - scrollY;
+	}
+
 	private void addLeft() {
+		System.out.println("addLeft");
 		addLeftOrRight(firstColumn - 1, 0);
 	}
 
 	private void addTop() {
+		System.out.println("addTop");
 		addTopAndBottom(firstRow - 1, 0);
 	}
 
 	private void addRight() {
+		System.out.println("addRight" + (firstColumn + rowViewList.size()));
 		final int size = rowViewList.size();
 		addLeftOrRight(firstColumn + size, size);
 	}
 
 	private void addBottom() {
+		System.out.println("addBottom");
 		final int size = columnViewList.size();
-		addTopAndBottom(firstColumn + size, size);
+		addTopAndBottom(firstRow + size, size);
 	}
 
 	private void addLeftOrRight(int column, int index) {
@@ -184,18 +218,22 @@ public class TableFixHeaders2 extends ViewGroup {
 	}
 
 	private void removeLeft() {
+		System.out.println("removeLeft");
 		removeLeftOrRight(0);
 	}
 
 	private void removeTop() {
+		System.out.println("removeTop");
 		removeTopOrBottom(0);
 	}
 
 	private void removeRight() {
+		System.out.println("removeRight");
 		removeLeftOrRight(rowViewList.size() - 1);
 	}
 
 	private void removeBottom() {
+		System.out.println("removeBottom");
 		removeTopOrBottom(rowViewList.size() - 1);
 	}
 
@@ -228,7 +266,6 @@ public class TableFixHeaders2 extends ViewGroup {
 		top = heights[0] - scrollY;
 		i = firstRow;
 		for (View view : columnViewList) {
-			System.out.println(firstRow + " " + i);
 			bottom = top + heights[++i];
 			view.layout(0, top, widths[0], bottom);
 			top = bottom;
@@ -303,45 +340,46 @@ public class TableFixHeaders2 extends ViewGroup {
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		System.out.println("boolean " + changed + ", int " + l + ", int " + t + ", int " + r + ", int " + b);
 
-		resetTable();
+		if (changed) {
+			resetTable();
 
-		width = r - l;
-		height = b - t;
+			width = r - l;
+			height = b - t;
 
-		int left, top, right, bottom;
+			int left, top, right, bottom;
 
-		headView = makeAndSetup(-1, -1, 0, 0, widths[0], heights[0]);
+			headView = makeAndSetup(-1, -1, 0, 0, widths[0], heights[0]);
 
-		left = widths[0] - scrollX;
-		for (int i = firstColumn; i < columnCount && left < width; i++) {
-			right = left + widths[i + 1];
-			final View view = makeAndSetup(-1, i, left, 0, right, heights[0]);
-			rowViewList.add(view);
-			left = right;
-		}
-
-		top = heights[0] - scrollY;
-		for (int i = firstRow; i < rowCount && top < height; i++) {
-			System.out.println("#" + firstRow + " " + i);
-			bottom = top + heights[i + 1];
-			final View view = makeAndSetup(i, -1, 0, top, widths[0], bottom);
-			columnViewList.add(view);
-			top = bottom;
-		}
-
-		top = heights[0] - scrollY;
-		for (int i = firstRow; i < rowCount && top < height; i++) {
-			bottom = top + heights[i + 1];
 			left = widths[0] - scrollX;
-			List<View> list = new ArrayList<View>();
-			for (int j = firstColumn; j < columnCount && left < width; j++) {
-				right = left + widths[j + 1];
-				final View view = makeAndSetup(i, j, left, top, right, bottom);
-				list.add(view);
+			for (int i = firstColumn; i < columnCount && left < width; i++) {
+				right = left + widths[i + 1];
+				final View view = makeAndSetup(-1, i, left, 0, right, heights[0]);
+				rowViewList.add(view);
 				left = right;
 			}
-			bodyViewTable.add(list);
-			top = bottom;
+
+			top = heights[0] - scrollY;
+			for (int i = firstRow; i < rowCount && top < height; i++) {
+				bottom = top + heights[i + 1];
+				final View view = makeAndSetup(i, -1, 0, top, widths[0], bottom);
+				columnViewList.add(view);
+				top = bottom;
+			}
+
+			top = heights[0] - scrollY;
+			for (int i = firstRow; i < rowCount && top < height; i++) {
+				bottom = top + heights[i + 1];
+				left = widths[0] - scrollX;
+				List<View> list = new ArrayList<View>();
+				for (int j = firstColumn; j < columnCount && left < width; j++) {
+					right = left + widths[j + 1];
+					final View view = makeAndSetup(i, j, left, top, right, bottom);
+					list.add(view);
+					left = right;
+				}
+				bodyViewTable.add(list);
+				top = bottom;
+			}
 		}
 	}
 
