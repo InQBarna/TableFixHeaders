@@ -132,38 +132,49 @@ public class TableFixHeaders2 extends ViewGroup {
 
 		final int[] widths = getAdapterWidths();
 		final int[] heights = getAdapterHeights();
-		int h = 0;
-		int nextH;
-		for (int i = -1; i < rowCount; i++) {
-			nextH = h + heights[i + 1];
-			int w = 0;
-			int nextW;
-			for (int j = -1; j < columnCount; j++) {
-				final View view = adapter.getView(i, j, this);
-				view.measure(MeasureSpec.makeMeasureSpec(widths[j + 1], MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heights[i + 1], MeasureSpec.EXACTLY));
-				addView(i, j, view);
-				nextW = w + widths[j + 1];
-				int a[] = { w, h, nextW, nextH };
-				if (i != -1) {
-					a[1] -= scrollY;
-					a[3] -= scrollY;
-				}
-				if (j != -1) {
-					a[0] -= scrollX;
-					a[2] -= scrollX;
-				}
-				view.layout(a[0], a[1], a[2], a[3]);
-				w = nextW;
+		int left, top, right, bottom;
+
+		makeAndSetup(-1, -1, 0, 0, widths[0], heights[0]);
+
+		left = widths[0] - scrollX;
+		for (int i = firstColumn; i < columnCount; i++) {
+			right = left + widths[i + 1];
+			makeAndSetup(-1, i, left, 0, right, heights[0]);
+			left = right;
+		}
+
+		top = heights[0] - scrollY;
+		for (int i = firstColumn; i < columnCount; i++) {
+			bottom = top + heights[i + 1];
+			makeAndSetup(i, -1, 0, top, widths[0], bottom);
+			top = bottom;
+		}
+
+		top = heights[0] - scrollY;
+		for (int i = firstRow; i < rowCount; i++) {
+			bottom = top + heights[i + 1];
+			left = widths[0] - scrollX;
+			for (int j = firstColumn; j < columnCount; j++) {
+				right = left + widths[j + 1];
+				makeAndSetup(i, j, left, top, right, bottom);
+				left = right;
 			}
-			h = nextH;
+			top = bottom;
 		}
 	}
 
-	private void addView(int row, int column, View view) {
+	private void makeAndSetup(int row, int column, int left, int top, int right, int bottom) {
+		final View view = adapter.getView(row, column, this);
+		view.measure(MeasureSpec.makeMeasureSpec(left - right, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(top - bottom, MeasureSpec.EXACTLY));
+		addTableView(view, row, column);
+		view.layout(left, top, right, bottom);
+	}
+
+	private void addTableView(View view, int row, int column) {
 		if (row == -1 && column == -1) {
 			addView(view);
 		} else if (row == -1 || column == -1) {
-			addView(view, getChildCount() - 1); // No problem with index -1
+			addView(view, getChildCount() - 1);
 		} else {
 			addView(view, 0);
 		}
