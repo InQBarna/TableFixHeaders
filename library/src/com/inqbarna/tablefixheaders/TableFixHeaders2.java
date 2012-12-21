@@ -17,8 +17,10 @@ public class TableFixHeaders2 extends ViewGroup {
 	private int currentY;
 
 	private TableAdapter adapter;
-	private int scrollX = 15;
-	private int scrollY = 15;
+	private int scrollX = 0;
+	private int scrollY = 0;
+	private int firstRow;
+	private int firstColumn;
 
 	private View head;
 	private List<View> row;
@@ -69,29 +71,34 @@ public class TableFixHeaders2 extends ViewGroup {
 
 	@Override
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-		int widthSize = MeasureSpec.getSize(widthMeasureSpec);
-		int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+		final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+		final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+		final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+		final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
 		final int w;
 		final int h;
 
 		if (adapter != null) {
-			if (widthMode == MeasureSpec.AT_MOST) {
+			if (widthMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
 				w = Math.min(widthSize, getAdapterDesiredWidth());
 			} else {
 				w = widthSize;
 			}
 
-			if (heightMode == MeasureSpec.AT_MOST) {
+			if (heightMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
 				h = Math.min(heightSize, getAdapterDesiredHeight());
 			} else {
 				h = heightSize;
 			}
 		} else {
-			w = widthSize;
-			h = heightSize;
+			if (heightMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
+				w = 0;
+				h = 0;
+			} else {
+				w = widthSize;
+				h = heightSize;
+			}
 		}
 
 		setMeasuredDimension(w, h);
@@ -132,9 +139,9 @@ public class TableFixHeaders2 extends ViewGroup {
 			int w = 0;
 			int nextW;
 			for (int j = -1; j < columnCount; j++) {
-				View view = adapter.getView(i, j, this);
+				final View view = adapter.getView(i, j, this);
 				view.measure(MeasureSpec.makeMeasureSpec(widths[j + 1], MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(heights[i + 1], MeasureSpec.EXACTLY));
-				addView(view);
+				addView(i, j, view);
 				nextW = w + widths[j + 1];
 				int a[] = { w, h, nextW, nextH };
 				if (i != -1) {
@@ -149,6 +156,16 @@ public class TableFixHeaders2 extends ViewGroup {
 				w = nextW;
 			}
 			h = nextH;
+		}
+	}
+
+	private void addView(int row, int column, View view) {
+		if (row == -1 && column == -1) {
+			addView(view);
+		} else if (row == -1 || column == -1) {
+			addView(view, getChildCount() - 1); // No problem with index -1
+		} else {
+			addView(view, 0);
 		}
 	}
 
