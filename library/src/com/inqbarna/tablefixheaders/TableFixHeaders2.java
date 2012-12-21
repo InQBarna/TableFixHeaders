@@ -1,6 +1,5 @@
 package com.inqbarna.tablefixheaders;
 
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,22 +141,38 @@ public class TableFixHeaders2 extends ViewGroup {
 	}
 
 	private void addLeft() {
-		final int column = firstColumn - 1;
+		addLeftOrRight(firstColumn - 1, 0);
+	}
+
+	private void addTop() {
+		addTopAndBottom(firstRow - 1, 0);
+	}
+
+	private void addRight() {
+		final int size = rowViewList.size();
+		addLeftOrRight(firstColumn + size, size);
+	}
+
+	private void addBottom() {
+		final int size = columnViewList.size();
+		addTopAndBottom(firstColumn + size, size);
+	}
+
+	private void addLeftOrRight(int column, int index) {
 		View view = makeView(-1, column, widths[column + 1], heights[0]);
-		rowViewList.add(0, view);
+		rowViewList.add(index, view);
 
 		int i = firstRow;
 		for (List<View> list : bodyViewTable) {
 			view = makeView(i, column, widths[column + 1], heights[i + 1]);
-			list.add(0, view);
+			list.add(index, view);
 			i++;
 		}
 	}
 
-	private void addTop() {
-		final int row = firstRow - 1;
+	private void addTopAndBottom(int row, int index) {
 		View view = makeView(row, -1, widths[0], heights[row + 1]);
-		columnViewList.add(0, view);
+		columnViewList.add(index, view);
 
 		List<View> list = new ArrayList<View>();
 		final int size = rowViewList.size() + firstColumn;
@@ -165,7 +180,7 @@ public class TableFixHeaders2 extends ViewGroup {
 			view = makeView(row, i, widths[i + 1], heights[row + 1]);
 			list.add(view);
 		}
-		bodyViewTable.add(0, list);
+		bodyViewTable.add(index, list);
 	}
 
 	private void removeLeft() {
