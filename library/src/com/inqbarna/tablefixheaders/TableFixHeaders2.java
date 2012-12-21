@@ -21,6 +21,8 @@ public class TableFixHeaders2 extends ViewGroup {
 	private int scrollY = 0;
 	private int firstRow;
 	private int firstColumn;
+	private int[] widths;
+	private int[] heights;
 
 	private View head;
 	private List<View> row;
@@ -41,6 +43,9 @@ public class TableFixHeaders2 extends ViewGroup {
 
 	public void setAdapter(TableAdapter adapter) {
 		this.adapter = adapter;
+
+		widths = getAdapterWidths();
+		heights = getAdapterHeights();
 
 		requestLayout();
 	}
@@ -81,13 +86,13 @@ public class TableFixHeaders2 extends ViewGroup {
 
 		if (adapter != null) {
 			if (widthMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
-				w = Math.min(widthSize, getAdapterDesiredWidth());
+				w = Math.min(widthSize, sumArray(widths));
 			} else {
 				w = widthSize;
 			}
 
 			if (heightMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
-				h = Math.min(heightSize, getAdapterDesiredHeight());
+				h = Math.min(heightSize, sumArray(heights));
 			} else {
 				h = heightSize;
 			}
@@ -104,22 +109,13 @@ public class TableFixHeaders2 extends ViewGroup {
 		setMeasuredDimension(w, h);
 	}
 
-	private int getAdapterDesiredWidth() {
-		final int columnCount = adapter.getColumnCount();
-		int desired = 0;
-		for (int i = -1; i < columnCount; i++) {
-			desired += adapter.getWidth(i);
+	private int sumArray(int array[]) {
+		int sum = 0;
+		final int length = array.length;
+		for (int i = 0; i < length; i++) {
+			sum += array[i];
 		}
-		return desired;
-	}
-
-	private int getAdapterDesiredHeight() {
-		final int rowCount = adapter.getRowCount();
-		int desired = 0;
-		for (int i = -1; i < rowCount; i++) {
-			desired += adapter.getHeight(i);
-		}
-		return desired;
+		return sum;
 	}
 
 	@Override
@@ -127,6 +123,10 @@ public class TableFixHeaders2 extends ViewGroup {
 		System.out.println("boolean " + changed + ", int " + l + ", int " + t + ", int " + r + ", int " + b);
 
 		removeAllViews();
+
+		final int width = r - l;
+		final int height = b - t;
+
 		final int rowCount = adapter.getRowCount();
 		final int columnCount = adapter.getColumnCount();
 
@@ -137,24 +137,25 @@ public class TableFixHeaders2 extends ViewGroup {
 		makeAndSetup(-1, -1, 0, 0, widths[0], heights[0]);
 
 		left = widths[0] - scrollX;
-		for (int i = firstColumn; i < columnCount; i++) {
+		for (int i = firstColumn; i < columnCount && left < width; i++) {
+			System.out.println(i);
 			right = left + widths[i + 1];
 			makeAndSetup(-1, i, left, 0, right, heights[0]);
 			left = right;
 		}
 
 		top = heights[0] - scrollY;
-		for (int i = firstColumn; i < columnCount; i++) {
+		for (int i = firstRow; i < rowCount && top < height; i++) {
 			bottom = top + heights[i + 1];
 			makeAndSetup(i, -1, 0, top, widths[0], bottom);
 			top = bottom;
 		}
 
 		top = heights[0] - scrollY;
-		for (int i = firstRow; i < rowCount; i++) {
+		for (int i = firstRow; i < rowCount && top < height; i++) {
 			bottom = top + heights[i + 1];
 			left = widths[0] - scrollX;
-			for (int j = firstColumn; j < columnCount; j++) {
+			for (int j = firstColumn; j < columnCount && left < width; j++) {
 				right = left + widths[j + 1];
 				makeAndSetup(i, j, left, top, right, bottom);
 				left = right;
