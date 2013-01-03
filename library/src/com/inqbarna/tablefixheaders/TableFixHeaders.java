@@ -85,6 +85,27 @@ public class TableFixHeaders extends ViewGroup {
 	}
 
 	@Override
+	public boolean onInterceptTouchEvent(MotionEvent event) {
+		boolean intercept = false;
+		switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN: {
+				currentX = (int) event.getRawX();
+				currentY = (int) event.getRawY();
+				break;
+			}
+			case MotionEvent.ACTION_MOVE: {
+				int x2 = currentX - (int) event.getRawX();
+				int y2 = currentY - (int) event.getRawY();
+				if (x2 < -CLICK_SENSIVILITY || x2 > CLICK_SENSIVILITY || y2 < -CLICK_SENSIVILITY || y2 > CLICK_SENSIVILITY) {
+					intercept = true;
+				}
+				break;
+			}
+		}
+		return intercept;
+	}
+
+	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN: {
