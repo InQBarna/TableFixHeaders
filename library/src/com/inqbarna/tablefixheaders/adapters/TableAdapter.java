@@ -16,6 +16,24 @@ import android.view.ViewGroup;
 public interface TableAdapter {
 
 	/**
+	 * Register an observer that is called when changes happen to the data used
+	 * by this adapter.
+	 * 
+	 * @param observer
+	 *            the object that gets notified when the data set changes.
+	 */
+	void registerDataSetObserver(DataSetObserver observer);
+
+	/**
+	 * Unregister an observer that has previously been registered with this
+	 * adapter via {@link #registerDataSetObserver}.
+	 * 
+	 * @param observer
+	 *            the object to unregister.
+	 */
+	void unregisterDataSetObserver(DataSetObserver observer);
+
+	/**
 	 * How many rows are in the data table represented by this Adapter.
 	 * 
 	 * @return count of rows.
@@ -65,42 +83,6 @@ public interface TableAdapter {
 	 * @return The height of the row, in pixels.
 	 */
 	public int getHeight(int row);
-
-	/**
-	 * Implement these methods to allow a client application class to if you
-	 * want {@link TableFixHeaders} to attach to your Custom implementation of
-	 * {@link TableAdapter}
-	 * 
-	 * @author David García <david.garcia@inqbarna.com>
-	 * 
-	 */
-	public interface Observable {
-
-		/**
-		 * Register an observer within this adapter.
-		 * 
-		 * If you are implementing this interface {@link TableFixHeaders} will
-		 * call this method to register a {@link DataSetObserver} that should be
-		 * notified of data changes
-		 * 
-		 * @param observer
-		 *            The observer instance
-		 */
-		public void registerDataSetObserver(DataSetObserver observer);
-
-		/**
-		 * Unregister an observer from this adapter.
-		 * 
-		 * If you are implementing this interface {@link TableFixHeaders} will
-		 * call this method to un-register a {@link DataSetObserver} to stop
-		 * receiving notifications.
-		 * 
-		 * @param observer
-		 *            The observer instance
-		 */
-		public void unregisterDataSetObserver(DataSetObserver observer);
-
-	}
 
 	public int getItemViewType(int row, int column);
 

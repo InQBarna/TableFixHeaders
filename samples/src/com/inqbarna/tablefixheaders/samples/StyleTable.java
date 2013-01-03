@@ -6,7 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.inqbarna.tablefixheaders.TableFixHeaders;
-import com.inqbarna.tablefixheaders.samples.adapters.BaseTableAdapter;
+import com.inqbarna.tablefixheaders.samples.adapters.SampleTableAdapter;
 
 public class StyleTable extends Activity {
 
@@ -19,7 +19,7 @@ public class StyleTable extends Activity {
 		tableFixHeaders.setAdapter(new MyAdapter(this));
 	}
 
-	public class MyAdapter extends BaseTableAdapter {
+	public class MyAdapter extends SampleTableAdapter {
 
 		private final int width;
 		private final int height;

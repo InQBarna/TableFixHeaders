@@ -1,6 +1,6 @@
 package com.inqbarna.tablefixheaders.samples.adapters;
 
-import com.inqbarna.tablefixheaders.adapters.TableAdapter;
+import com.inqbarna.tablefixheaders.adapters.BaseTableAdapter;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class MatrixTableAdapter<T> implements TableAdapter {
+public class MatrixTableAdapter<T> extends BaseTableAdapter {
 
 	private final static int WIDTH_DIP = 110;
 	private final static int HEIGHT_DIP = 45;

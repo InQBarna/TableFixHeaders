@@ -7,6 +7,7 @@ import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.DataSetObserver;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +41,9 @@ public class TableFixHeaders extends ViewGroup {
 
 	private Recycler recycler;
 
+	private TableAdapterDataSetObserver tableAdapterDataSetObserver;
+	private boolean needRelayout;
+
 	public TableFixHeaders(Context context) {
 		this(context, null);
 	}
@@ -57,6 +61,8 @@ public class TableFixHeaders extends ViewGroup {
 		this.rowViewList = new ArrayList<View>();
 		this.columnViewList = new ArrayList<View>();
 		this.bodyViewTable = new ArrayList<List<View>>();
+
+		this.needRelayout = true;
 	}
 
 	public TableAdapter getAdapter() {
@@ -64,7 +70,13 @@ public class TableFixHeaders extends ViewGroup {
 	}
 
 	public void setAdapter(TableAdapter adapter) {
+		if (this.adapter != null) {
+			this.adapter.unregisterDataSetObserver(tableAdapterDataSetObserver);
+		}
+
 		this.adapter = adapter;
+		tableAdapterDataSetObserver = new TableAdapterDataSetObserver();
+		this.adapter.registerDataSetObserver(tableAdapterDataSetObserver);
 
 		this.recycler = new Recycler(adapter.getViewTypeCount());
 
@@ -80,6 +92,7 @@ public class TableFixHeaders extends ViewGroup {
 			heights[i + 1] += adapter.getHeight(i);
 		}
 
+		needRelayout = true;
 		requestLayout();
 	}
 
@@ -382,7 +395,8 @@ public class TableFixHeaders extends ViewGroup {
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		System.out.println("boolean " + changed + ", int " + l + ", int " + t + ", int " + r + ", int " + b);
 
-		if (changed) {
+		if (needRelayout || changed) {
+			needRelayout = false;
 			resetTable();
 
 			if (adapter != null) {
@@ -456,6 +470,20 @@ public class TableFixHeaders extends ViewGroup {
 			addView(view, getChildCount() - 1);
 		} else {
 			addView(view, 0);
+		}
+	}
+
+	private class TableAdapterDataSetObserver extends DataSetObserver {
+
+		@Override
+		public void onChanged() {
+			needRelayout = true;
+			requestLayout();
+		}
+
+		@Override
+		public void onInvalidated() {
+			// Do nothing
 		}
 	}
 }
