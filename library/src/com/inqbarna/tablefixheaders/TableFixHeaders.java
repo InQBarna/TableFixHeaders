@@ -12,7 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class TableFixHeaders2 extends ViewGroup {
+public class TableFixHeaders extends ViewGroup {
 	private final static int CLICK_SENSIVILITY = 2;
 
 	private int currentX;
@@ -41,11 +41,11 @@ public class TableFixHeaders2 extends ViewGroup {
 
 	private Recycler recycler;
 
-	public TableFixHeaders2(Context context) {
+	public TableFixHeaders(Context context) {
 		this(context, null);
 	}
 
-	public TableFixHeaders2(Context context, AttributeSet attrs) {
+	public TableFixHeaders(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		this.firstRow = 0;

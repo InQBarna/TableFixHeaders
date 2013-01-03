@@ -1,6 +1,6 @@
 package com.inqbarna.tablefixheaders.samples;
 
-import com.inqbarna.tablefixheaders.TableFixHeaders2;
+import com.inqbarna.tablefixheaders.TableFixHeaders;
 import com.inqbarna.tablefixheaders.samples.adapters.MatrixTableAdapter;
 
 import android.app.Activity;
@@ -13,7 +13,7 @@ public class SimpleTable extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.table);
 
-		TableFixHeaders2 tableFixHeaders = (TableFixHeaders2) findViewById(R.id.table);
+		TableFixHeaders tableFixHeaders = (TableFixHeaders) findViewById(R.id.table);
 		MatrixTableAdapter<String> matrixTableAdapter = new MatrixTableAdapter<String>(this, new String[][] {
 				{
 						"Header 1",
