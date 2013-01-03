@@ -33,11 +33,9 @@ public class TableFixHeaders extends ViewGroup {
 	private List<List<View>> bodyViewTable;
 
 	private int rowCount;
-
 	private int columnCount;
 
 	private int width;
-
 	private int height;
 
 	private Recycler recycler;
@@ -384,45 +382,47 @@ public class TableFixHeaders extends ViewGroup {
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		System.out.println("boolean " + changed + ", int " + l + ", int " + t + ", int " + r + ", int " + b);
 
-		if (changed && adapter != null) {
+		if (changed) {
 			resetTable();
 
-			width = r - l;
-			height = b - t;
+			if (adapter != null) {
+				width = r - l;
+				height = b - t;
 
-			int left, top, right, bottom;
+				int left, top, right, bottom;
 
-			headView = makeAndSetup(-1, -1, 0, 0, widths[0], heights[0]);
+				headView = makeAndSetup(-1, -1, 0, 0, widths[0], heights[0]);
 
-			left = widths[0] - scrollX;
-			for (int i = firstColumn; i < columnCount && left < width; i++) {
-				right = left + widths[i + 1];
-				final View view = makeAndSetup(-1, i, left, 0, right, heights[0]);
-				rowViewList.add(view);
-				left = right;
-			}
-
-			top = heights[0] - scrollY;
-			for (int i = firstRow; i < rowCount && top < height; i++) {
-				bottom = top + heights[i + 1];
-				final View view = makeAndSetup(i, -1, 0, top, widths[0], bottom);
-				columnViewList.add(view);
-				top = bottom;
-			}
-
-			top = heights[0] - scrollY;
-			for (int i = firstRow; i < rowCount && top < height; i++) {
-				bottom = top + heights[i + 1];
 				left = widths[0] - scrollX;
-				List<View> list = new ArrayList<View>();
-				for (int j = firstColumn; j < columnCount && left < width; j++) {
-					right = left + widths[j + 1];
-					final View view = makeAndSetup(i, j, left, top, right, bottom);
-					list.add(view);
+				for (int i = firstColumn; i < columnCount && left < width; i++) {
+					right = left + widths[i + 1];
+					final View view = makeAndSetup(-1, i, left, 0, right, heights[0]);
+					rowViewList.add(view);
 					left = right;
 				}
-				bodyViewTable.add(list);
-				top = bottom;
+
+				top = heights[0] - scrollY;
+				for (int i = firstRow; i < rowCount && top < height; i++) {
+					bottom = top + heights[i + 1];
+					final View view = makeAndSetup(i, -1, 0, top, widths[0], bottom);
+					columnViewList.add(view);
+					top = bottom;
+				}
+
+				top = heights[0] - scrollY;
+				for (int i = firstRow; i < rowCount && top < height; i++) {
+					bottom = top + heights[i + 1];
+					left = widths[0] - scrollX;
+					List<View> list = new ArrayList<View>();
+					for (int j = firstColumn; j < columnCount && left < width; j++) {
+						right = left + widths[j + 1];
+						final View view = makeAndSetup(i, j, left, top, right, bottom);
+						list.add(view);
+						left = right;
+					}
+					bodyViewTable.add(list);
+					top = bottom;
+				}
 			}
 		}
 	}
