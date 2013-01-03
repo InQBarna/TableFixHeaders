@@ -126,8 +126,8 @@ public class TableFixHeaders extends ViewGroup {
 
 				scrollX += diffX;
 				scrollY += diffY;
-				final Boolean up = diffX == 0 ? null : diffX <= 0;
-				final Boolean left = diffY == 0 ? null : diffY <= 0;
+				final Boolean left = diffX == 0 ? null : diffX <= 0;
+				final Boolean up = diffY == 0 ? null : diffY <= 0;
 
 				//				System.out.println("up: " + up);
 				//				System.out.println("left: " + left);
@@ -149,9 +149,9 @@ public class TableFixHeaders extends ViewGroup {
 				}
 
 				// add or remove views
-				if (up == null) {
+				if (left == null) {
 					// no op
-				} else if (!up) {
+				} else if (!left) {
 					while (widths[firstColumn + 1] < scrollX) {
 						removeLeft();
 						scrollX -= widths[firstColumn + 1];
@@ -172,9 +172,9 @@ public class TableFixHeaders extends ViewGroup {
 				}
 
 				//				System.out.println(scrollY);
-				if (left == null) {
+				if (up == null) {
 					// no op
-				} else if (!left) {
+				} else if (!up) {
 					while (heights[firstRow + 1] < scrollY) {
 						removeTop();
 						scrollY -= heights[firstRow + 1];
