@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  * set.
  * 
  * @author Brais Gabín
- * @see TableFixHeaders2
+ * @see TableFixHeaders
  */
 public interface TableAdapter {
 
@@ -46,7 +46,7 @@ public interface TableAdapter {
 	 *            The parent that this view will eventually be attached to.
 	 * @return A View corresponding to the data at the specified row and column.
 	 */
-	public View getView(int row, int column, View converView, ViewGroup parent);
+	public View getView(int row, int column, View convertView, ViewGroup parent);
 
 	/**
 	 * Return the width of the column.
@@ -68,7 +68,7 @@ public interface TableAdapter {
 
 	/**
 	 * Implement these methods to allow a client application class to if you
-	 * want {@link TableFixHeaders2} to attach to your Custom implementation of
+	 * want {@link TableFixHeaders} to attach to your Custom implementation of
 	 * {@link TableAdapter}
 	 * 
 	 * @author David García <david.garcia@inqbarna.com>
@@ -79,7 +79,7 @@ public interface TableAdapter {
 		/**
 		 * Register an observer within this adapter.
 		 * 
-		 * If you are implementing this interface {@link TableFixHeaders2} will
+		 * If you are implementing this interface {@link TableFixHeaders} will
 		 * call this method to register a {@link DataSetObserver} that should be
 		 * notified of data changes
 		 * 
@@ -91,7 +91,7 @@ public interface TableAdapter {
 		/**
 		 * Unregister an observer from this adapter.
 		 * 
-		 * If you are implementing this interface {@link TableFixHeaders2} will
+		 * If you are implementing this interface {@link TableFixHeaders} will
 		 * call this method to un-register a {@link DataSetObserver} to stop
 		 * receiving notifications.
 		 * 
