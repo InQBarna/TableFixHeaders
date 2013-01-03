@@ -83,15 +83,6 @@ public class TableFixHeaders extends ViewGroup {
 		this.rowCount = adapter.getRowCount();
 		this.columnCount = adapter.getColumnCount();
 
-		widths = new int[columnCount + 1];
-		for (int i = -1; i < columnCount; i++) {
-			widths[i + 1] += adapter.getWidth(i);
-		}
-		heights = new int[rowCount + 1];
-		for (int i = -1; i < rowCount; i++) {
-			heights[i + 1] += adapter.getHeight(i);
-		}
-
 		needRelayout = true;
 		requestLayout();
 	}
@@ -353,10 +344,27 @@ public class TableFixHeaders extends ViewGroup {
 		final int h;
 
 		if (adapter != null) {
+			widths = new int[columnCount + 1];
+			for (int i = -1; i < columnCount; i++) {
+				widths[i + 1] += adapter.getWidth(i);
+			}
+			heights = new int[rowCount + 1];
+			for (int i = -1; i < rowCount; i++) {
+				heights[i + 1] += adapter.getHeight(i);
+			}
+
 			if (widthMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
 				w = Math.min(widthSize, sumArray(widths));
 			} else {
 				w = widthSize;
+				int sumArray = sumArray(widths);
+				if (sumArray < widthSize) {
+					final float factor = widthSize / (float) sumArray;
+					for (int i = 1; i < widths.length; i++) {
+						widths[i] = Math.round(widths[i] * factor);
+					}
+					widths[0] = widthSize - sumArray(widths, 1, widths.length - 1);
+				}
 			}
 
 			if (heightMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
