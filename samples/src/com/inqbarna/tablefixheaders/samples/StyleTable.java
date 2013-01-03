@@ -40,17 +40,17 @@ public class StyleTable extends Activity {
 
 		@Override
 		public int getColumnCount() {
-			return 5;
+			return 8;
 		}
 
 		@Override
 		public int getWidth(int column) {
-			return width;
+			return column == 1 ? width / 2 : width;
 		}
 
 		@Override
 		public int getHeight(int row) {
-			return height;
+			return row == 1 ? height / 2 : height;
 		}
 
 		@Override

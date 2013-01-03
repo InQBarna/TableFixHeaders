@@ -150,9 +150,9 @@ public class TableFixHeaders extends ViewGroup {
 				if (scrollX == 0) {
 					// no op
 				} else if (!up) {
-					while (widths[firstColumn] < scrollX) {
+					while (widths[firstColumn + 1] < scrollX) {
 						removeLeft();
-						scrollX -= widths[firstColumn];
+						scrollX -= widths[firstColumn + 1];
 						firstColumn++;
 					}
 					while (getFilledWidth() < width) {
@@ -165,7 +165,7 @@ public class TableFixHeaders extends ViewGroup {
 					while (0 > scrollX) {
 						addLeft();
 						firstColumn--;
-						scrollX += widths[firstColumn];
+						scrollX += widths[firstColumn + 1];
 					}
 				}
 
@@ -173,9 +173,9 @@ public class TableFixHeaders extends ViewGroup {
 				if (scrollY == 0) {
 					// no op
 				} else if (!left) {
-					while (heights[firstColumn] < scrollY) {
+					while (heights[firstRow + 1] < scrollY) {
 						removeTop();
-						scrollY -= heights[firstRow];
+						scrollY -= heights[firstRow + 1];
 						firstRow++;
 					}
 					while (getFilledHeight() < height) {
@@ -188,7 +188,7 @@ public class TableFixHeaders extends ViewGroup {
 					while (0 > scrollY) {
 						addTop();
 						firstRow--;
-						scrollY += heights[firstRow];
+						scrollY += heights[firstRow + 1];
 					}
 				}
 
@@ -384,7 +384,7 @@ public class TableFixHeaders extends ViewGroup {
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		System.out.println("boolean " + changed + ", int " + l + ", int " + t + ", int " + r + ", int " + b);
 
-		if (changed) {
+		if (changed && adapter != null) {
 			resetTable();
 
 			width = r - l;
