@@ -8,12 +8,9 @@ import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AbsListView.RecyclerListener;
 
 public class TableFixHeaders2 extends ViewGroup {
 	private final static int CLICK_SENSIVILITY = 2;
@@ -98,13 +95,21 @@ public class TableFixHeaders2 extends ViewGroup {
 			case MotionEvent.ACTION_MOVE: {
 				final int x2 = (int) event.getRawX();
 				final int y2 = (int) event.getRawY();
-				scrollX += currentX - x2;
-				scrollY += currentY - y2;
+				final int diffX = currentX - x2;
+				final int diffY = currentY - y2;
 				currentX = x2;
 				currentY = y2;
 
+				scrollX += diffX;
+				scrollY += diffY;
+				final boolean up = diffX <= 0;
+				final boolean left = diffY <= 0;
+
+				//				System.out.println("up: " + up);
+				//				System.out.println("left: " + left);
 				// scroll bounds
 				if (scrollX == 0) {
+					// no op
 				} else if (scrollX < 0) {
 					scrollX = Math.max(scrollX, -sumArray(widths, 1, firstColumn));
 				} else {
@@ -112,6 +117,7 @@ public class TableFixHeaders2 extends ViewGroup {
 				}
 
 				if (scrollY == 0) {
+					// no op
 				} else if (scrollY < 0) {
 					scrollY = Math.max(scrollY, -sumArray(heights, 1, firstRow));
 				} else {
@@ -120,7 +126,8 @@ public class TableFixHeaders2 extends ViewGroup {
 
 				// add or remove views
 				if (scrollX == 0) {
-				} else if (scrollX > 0) {
+					// no op
+				} else if (!up) {
 					while (widths[firstColumn] < scrollX) {
 						removeLeft();
 						scrollX -= widths[firstColumn];
@@ -140,8 +147,10 @@ public class TableFixHeaders2 extends ViewGroup {
 					}
 				}
 
+				//				System.out.println(scrollY);
 				if (scrollY == 0) {
-				} else if (scrollY > 0) {
+					// no op
+				} else if (!left) {
 					while (heights[firstColumn] < scrollY) {
 						removeTop();
 						scrollY -= heights[firstRow];
@@ -240,7 +249,7 @@ public class TableFixHeaders2 extends ViewGroup {
 
 	private void removeBottom() {
 		System.out.println("removeBottom");
-		removeTopOrBottom(rowViewList.size() - 1);
+		removeTopOrBottom(columnViewList.size() - 1);
 	}
 
 	private void removeLeftOrRight(int position) {
