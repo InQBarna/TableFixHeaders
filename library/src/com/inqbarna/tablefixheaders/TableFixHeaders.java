@@ -26,6 +26,7 @@ public class TableFixHeaders extends ViewGroup {
 	private int[] widths;
 	private int[] heights;
 
+	@SuppressWarnings("unused")
 	private View headView;
 	private List<View> rowViewList;
 	private List<View> columnViewList;
