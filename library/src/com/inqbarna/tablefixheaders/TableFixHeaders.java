@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 public class TableFixHeaders extends ViewGroup {
 	private final static int CLICK_SENSIVILITY = 2;
@@ -44,6 +45,8 @@ public class TableFixHeaders extends ViewGroup {
 	private TableAdapterDataSetObserver tableAdapterDataSetObserver;
 	private boolean needRelayout;
 
+	private ImageView[] shadows;
+
 	public TableFixHeaders(Context context) {
 		this(context, null);
 	}
@@ -63,6 +66,16 @@ public class TableFixHeaders extends ViewGroup {
 		this.bodyViewTable = new ArrayList<List<View>>();
 
 		this.needRelayout = true;
+
+		this.shadows = new ImageView[4];
+		this.shadows[0] = new ImageView(context);
+		this.shadows[0].setImageResource(R.drawable.shadow_left);
+		this.shadows[1] = new ImageView(context);
+		this.shadows[1].setImageResource(R.drawable.shadow_top);
+		this.shadows[2] = new ImageView(context);
+		this.shadows[2].setImageResource(R.drawable.shadow_right);
+		this.shadows[3] = new ImageView(context);
+		this.shadows[3].setImageResource(R.drawable.shadow_bottom);
 	}
 
 	public TableAdapter getAdapter() {
@@ -410,6 +423,14 @@ public class TableFixHeaders extends ViewGroup {
 
 				int left, top, right, bottom;
 
+				final int shadowSize = getResources().getDimensionPixelSize(R.dimen.shadow_size);
+				right = Math.min(width, sumArray(widths));
+				bottom = Math.min(height, sumArray(heights));
+				addShadow(shadows[0], widths[0], 0, widths[0] + shadowSize, bottom);
+				addShadow(shadows[1], 0, heights[0], right, heights[0] + shadowSize);
+				addShadow(shadows[2], right - shadowSize, 0, right, bottom);
+				addShadow(shadows[3], 0, bottom - shadowSize, right, bottom);
+
 				headView = makeAndSetup(-1, -1, 0, 0, widths[0], heights[0]);
 
 				left = widths[0] - scrollX;
@@ -446,6 +467,11 @@ public class TableFixHeaders extends ViewGroup {
 		}
 	}
 
+	private void addShadow(ImageView imageView, int l, int t, int r, int b) {
+		imageView.layout(l, t, r, b);
+		addView(imageView);
+	}
+
 	private void resetTable() {
 		headView = null;
 		rowViewList.clear();
@@ -470,9 +496,9 @@ public class TableFixHeaders extends ViewGroup {
 
 	private void addTableView(View view, int row, int column) {
 		if (row == -1 && column == -1) {
-			addView(view);
+			addView(view, getChildCount() - 4);
 		} else if (row == -1 || column == -1) {
-			addView(view, getChildCount() - 1);
+			addView(view, getChildCount() - 5);
 		} else {
 			addView(view, 0);
 		}
