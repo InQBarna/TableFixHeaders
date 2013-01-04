@@ -546,7 +546,7 @@ public class TableFixHeaders extends ViewGroup {
 				actualScrollX,
 				actualScrollY,
 				getMaxScrollX() - actualScrollX,
-				getMaxScrollX() - actualScrollY,
+				getMaxScrollY() - actualScrollY,
 		};
 
 		for (int i = 0; i < shadows.length; i++) {
