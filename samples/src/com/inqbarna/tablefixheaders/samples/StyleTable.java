@@ -40,17 +40,17 @@ public class StyleTable extends Activity {
 
 		@Override
 		public int getColumnCount() {
-			return 8;
+			return 6;
 		}
 
 		@Override
 		public int getWidth(int column) {
-			return column == 1 ? width / 2 : width;
+			return width;
 		}
 
 		@Override
 		public int getHeight(int row) {
-			return row == 1 ? height / 2 : height;
+			return height;
 		}
 
 		@Override
@@ -60,23 +60,26 @@ public class StyleTable extends Activity {
 
 		@Override
 		public int getLayoutResource(int row, int column) {
-			if (row < 0) {
-				return R.layout.item_table1_header;
-			} else if (row == 1) {
-				return R.layout.item_table2;
-			} else {
-				return R.layout.item_table1;
+			final int layoutResource;
+			switch (getItemViewType(row, column)) {
+				case 0:
+					layoutResource = R.layout.item_table1_header;
+				break;
+				case 1:
+					layoutResource = R.layout.item_table1;
+				break;
+				default:
+					throw new RuntimeException("wtf?");
 			}
+			return layoutResource;
 		}
 
 		@Override
 		public int getItemViewType(int row, int column) {
 			if (row < 0) {
 				return 0;
-			} else if (row == 1) {
-				return 1;
 			} else {
-				return 2;
+				return 1;
 			}
 		}
 

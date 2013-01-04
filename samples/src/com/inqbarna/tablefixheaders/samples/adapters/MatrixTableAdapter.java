@@ -4,7 +4,9 @@ import com.inqbarna.tablefixheaders.adapters.BaseTableAdapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,7 +14,7 @@ import android.widget.TextView;
 public class MatrixTableAdapter<T> extends BaseTableAdapter {
 
 	private final static int WIDTH_DIP = 110;
-	private final static int HEIGHT_DIP = 45;
+	private final static int HEIGHT_DIP = 32;
 
 	private final Context context;
 
@@ -53,6 +55,8 @@ public class MatrixTableAdapter<T> extends BaseTableAdapter {
 	public View getView(int row, int column, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			convertView = new TextView(context);
+			convertView.setBackgroundColor(Color.WHITE);
+			((TextView) convertView).setGravity(Gravity.CENTER_VERTICAL);
 		}
 		((TextView) convertView).setText(table[row + 1][column + 1].toString());
 		return convertView;
