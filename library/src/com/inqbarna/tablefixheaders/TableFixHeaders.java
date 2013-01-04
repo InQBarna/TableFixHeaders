@@ -129,8 +129,6 @@ public class TableFixHeaders extends ViewGroup {
 				final Boolean left = diffX == 0 ? null : diffX <= 0;
 				final Boolean up = diffY == 0 ? null : diffY <= 0;
 
-				//				System.out.println("up: " + up);
-				//				System.out.println("left: " + left);
 				// scroll bounds
 				if (scrollX == 0) {
 					// no op
@@ -171,7 +169,6 @@ public class TableFixHeaders extends ViewGroup {
 					}
 				}
 
-				//				System.out.println(scrollY);
 				if (up == null) {
 					// no op
 				} else if (!up) {
