@@ -258,6 +258,22 @@ public class TableFixHeaders extends ViewGroup {
 		return true;
 	}
 
+	private int getActualScrollX() {
+		return scrollX + sumArray(widths, 1, firstColumn);
+	}
+
+	private int getActualScrollY() {
+		return scrollY + sumArray(heights, 1, firstRow);
+	}
+
+	private int getMaxScrollX() {
+		return Math.max(0, sumArray(widths) - width);
+	}
+
+	private int getMaxScrollY() {
+		return Math.max(0, sumArray(heights) - height);
+	}
+
 	private int getFilledWidth() {
 		return widths[0] + sumArray(widths, firstColumn + 1, rowViewList.size()) - scrollX;
 	}
@@ -524,11 +540,13 @@ public class TableFixHeaders extends ViewGroup {
 
 	@SuppressWarnings("deprecation")
 	private void shadowsVisibility() {
+		final int actualScrollX = getActualScrollX();
+		final int actualScrollY = getActualScrollY();
 		final int[] remainPixels = {
-				scrollX + sumArray(widths, 1, firstColumn),
-				scrollY + sumArray(heights, 1, firstRow),
-				-scrollX + (sumArray(widths, firstColumn + 1, columnCount - firstColumn) + widths[0] - width),
-				-scrollY + Math.max(0, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height),
+				actualScrollX,
+				actualScrollY,
+				getMaxScrollX() - actualScrollX,
+				getMaxScrollX() - actualScrollY,
 		};
 
 		for (int i = 0; i < shadows.length; i++) {
