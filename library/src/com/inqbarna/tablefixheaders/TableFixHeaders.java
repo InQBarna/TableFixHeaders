@@ -45,7 +45,8 @@ public class TableFixHeaders extends ViewGroup {
 	private TableAdapterDataSetObserver tableAdapterDataSetObserver;
 	private boolean needRelayout;
 
-	private ImageView[] shadows;
+	private final ImageView[] shadows;
+	private final int shadowSize;
 
 	public TableFixHeaders(Context context) {
 		this(context, null);
@@ -76,6 +77,8 @@ public class TableFixHeaders extends ViewGroup {
 		this.shadows[2].setImageResource(R.drawable.shadow_right);
 		this.shadows[3] = new ImageView(context);
 		this.shadows[3].setImageResource(R.drawable.shadow_bottom);
+
+		shadowSize = getResources().getDimensionPixelSize(R.dimen.shadow_size);
 	}
 
 	public TableAdapter getAdapter() {
@@ -205,6 +208,8 @@ public class TableFixHeaders extends ViewGroup {
 				}
 
 				repositionViews();
+
+				shadowsVisibility();
 				break;
 			}
 		}
@@ -254,6 +259,7 @@ public class TableFixHeaders extends ViewGroup {
 	}
 
 	private void addTopAndBottom(int row, int index) {
+		System.out.println(row + ", " + heights.length);
 		View view = makeView(row, -1, widths[0], heights[row + 1]);
 		columnViewList.add(index, view);
 
@@ -427,7 +433,6 @@ public class TableFixHeaders extends ViewGroup {
 
 				int left, top, right, bottom;
 
-				final int shadowSize = getResources().getDimensionPixelSize(R.dimen.shadow_size);
 				right = Math.min(width, sumArray(widths));
 				bottom = Math.min(height, sumArray(heights));
 				addShadow(shadows[0], widths[0], 0, widths[0] + shadowSize, bottom);
@@ -467,7 +472,23 @@ public class TableFixHeaders extends ViewGroup {
 					bodyViewTable.add(list);
 					top = bottom;
 				}
+
+				shadowsVisibility();
 			}
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private void shadowsVisibility() {
+		final int[] remainPixels = {
+				scrollX + sumArray(widths, 1, firstColumn),
+				scrollY + sumArray(heights, 1, firstRow),
+				-scrollX + (sumArray(widths, firstColumn + 1, columnCount - firstColumn) + widths[0] - width),
+				-scrollY + Math.max(0, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height),
+		};
+
+		for (int i = 0; i < shadows.length; i++) {
+			shadows[i].setAlpha(Math.round((remainPixels[i] < shadowSize ? (remainPixels[i] * 255) / (float) shadowSize : 255)));
 		}
 	}
 
