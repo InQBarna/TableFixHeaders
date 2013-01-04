@@ -162,7 +162,7 @@ public class TableFixHeaders extends ViewGroup {
 				// add or remove views
 				if (left == null) {
 					// no op
-				} else if (!left) {
+				} else if (!left && scrollX != 0) {
 					while (widths[firstColumn + 1] < scrollX) {
 						removeLeft();
 						scrollX -= widths[firstColumn + 1];
@@ -171,7 +171,7 @@ public class TableFixHeaders extends ViewGroup {
 					while (getFilledWidth() < width) {
 						addRight();
 					}
-				} else {
+				} else if (left) {
 					while (getFilledWidth() - widths[firstColumn + rowViewList.size() - 1] >= width) {
 						removeRight();
 					}
@@ -184,7 +184,7 @@ public class TableFixHeaders extends ViewGroup {
 
 				if (up == null) {
 					// no op
-				} else if (!up) {
+				} else if (!up && scrollY != 0) {
 					while (heights[firstRow + 1] < scrollY) {
 						removeTop();
 						scrollY -= heights[firstRow + 1];
@@ -193,7 +193,7 @@ public class TableFixHeaders extends ViewGroup {
 					while (getFilledHeight() < height) {
 						addBottom();
 					}
-				} else {
+				} else if (up) {
 					while (getFilledHeight() - heights[firstRow + columnViewList.size() - 1] >= height) {
 						removeBottom();
 					}
