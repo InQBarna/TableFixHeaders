@@ -10,7 +10,7 @@ import android.view.ViewGroup;
  * The Adapter is also responsible for making a View for each item in the data
  * set.
  * 
- * @author Brais Gabín
+ * @author Brais Gabín (InQBarna)
  * @see TableFixHeaders
  */
 public interface TableAdapter {
@@ -94,8 +94,38 @@ public interface TableAdapter {
 	 */
 	public int getHeight(int row);
 
+	/**
+	 * Get the type of View that will be created by
+	 * {@link #getView(int, int, View, ViewGroup)} for the specified item.
+	 * 
+	 * @param row
+	 *            The row of the item within the adapter's data table of the
+	 *            item whose view we want. If the row is <code>-1</code> it is
+	 *            the header.
+	 * @param column
+	 *            The column of the item within the adapter's data table of the
+	 *            item whose view we want. If the column is <code>-1</code> it
+	 *            is the header.
+	 * @return An integer representing the type of View. Two views should share
+	 *         the same type if one can be converted to the other in
+	 *         {@link #getView(int, int, View, ViewGroup)}). Note: Integers must
+	 *         be in the range 0 to {@link #getViewTypeCount()} - 1.
+	 *         {@link #IGNORE_ITEM_VIEW_TYPE} can also be returned.
+	 */
 	public int getItemViewType(int row, int column);
 
+	/**
+	 * Returns the number of types of Views that will be created by
+	 * {@link #getView(int, int, View, ViewGroup)}. Each type represents a set
+	 * of views that can be converted in
+	 * {@link #getView(int, int, View, ViewGroup)}. If the adapter always
+	 * returns the same type of View for all items, this method should return 1.
+	 * 
+	 * This method will only be called when when the adapter is set on the the
+	 * AdapterView.
+	 * 
+	 * @return The number of types of Views that will be created by this adapter
+	 */
 	public int getViewTypeCount();
 
 }

@@ -14,6 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+/**
+ * This view shows a table which can scroll in both directions. Also still
+ * leaves the headers fixed.
+ * 
+ * @author Brais Gabín (InQBarna)
+ */
 public class TableFixHeaders extends ViewGroup {
 	private final static int CLICK_SENSIVILITY = 2;
 
@@ -48,10 +54,33 @@ public class TableFixHeaders extends ViewGroup {
 	private final ImageView[] shadows;
 	private final int shadowSize;
 
+	/**
+	 * Simple constructor to use when creating a view from code.
+	 * 
+	 * @param context
+	 *            The Context the view is running in, through which it can
+	 *            access the current theme, resources, etc.
+	 */
 	public TableFixHeaders(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * Constructor that is called when inflating a view from XML. This is called
+	 * when a view is being constructed from an XML file, supplying attributes
+	 * that were specified in the XML file. This version uses a default style of
+	 * 0, so the only attribute values applied are those in the Context's Theme
+	 * and the given AttributeSet.
+	 * 
+	 * The method onFinishInflate() will be called after all children have been
+	 * added.
+	 * 
+	 * @param context
+	 *            The Context the view is running in, through which it can
+	 *            access the current theme, resources, etc.
+	 * @param attrs
+	 *            The attributes of the XML tag that is inflating the view.
+	 */
 	public TableFixHeaders(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
@@ -81,10 +110,23 @@ public class TableFixHeaders extends ViewGroup {
 		shadowSize = getResources().getDimensionPixelSize(R.dimen.shadow_size);
 	}
 
+	/**
+	 * Returns the adapter currently associated with this widget.
+	 * 
+	 * @return The adapter used to provide this view's content.
+	 */
 	public TableAdapter getAdapter() {
 		return adapter;
 	}
 
+	/**
+	 * Sets the data behind this TableFixHeaders.
+	 * 
+	 * @param adapter
+	 *            The TableAdapter which is responsible for maintaining the data
+	 *            backing this list and for producing a view to represent an
+	 *            item in that data set.
+	 */
 	public void setAdapter(TableAdapter adapter) {
 		if (this.adapter != null) {
 			this.adapter.unregisterDataSetObserver(tableAdapterDataSetObserver);
