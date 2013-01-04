@@ -10,9 +10,13 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.Scroller;
 
 /**
  * This view shows a table which can scroll in both directions. Also still
@@ -53,6 +57,13 @@ public class TableFixHeaders extends ViewGroup {
 
 	private final ImageView[] shadows;
 	private final int shadowSize;
+
+	private final int minimumVelocity;
+	private final int maximumVelocity;
+
+	private final Scroller scroller;
+
+	private VelocityTracker velocityTracker;
 
 	/**
 	 * Simple constructor to use when creating a view from code.
@@ -107,7 +118,12 @@ public class TableFixHeaders extends ViewGroup {
 		this.shadows[3] = new ImageView(context);
 		this.shadows[3].setImageResource(R.drawable.shadow_bottom);
 
-		shadowSize = getResources().getDimensionPixelSize(R.dimen.shadow_size);
+		this.shadowSize = getResources().getDimensionPixelSize(R.dimen.shadow_size);
+
+		this.scroller = new Scroller(context);
+		final ViewConfiguration configuration = ViewConfiguration.get(context);
+		this.minimumVelocity = configuration.getScaledMinimumFlingVelocity();
+		this.maximumVelocity = configuration.getScaledMaximumFlingVelocity();
 	}
 
 	/**
@@ -168,8 +184,16 @@ public class TableFixHeaders extends ViewGroup {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
+		if (velocityTracker == null) { // If we do not have velocity tracker
+			velocityTracker = VelocityTracker.obtain(); // then get one
+		}
+		velocityTracker.addMovement(event); // add this movement to it
+
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN: {
+				if (!scroller.isFinished()) { // If scrolling, then stop now
+					scroller.abortAnimation();
+				}
 				currentX = (int) event.getRawX();
 				currentY = (int) event.getRawY();
 				break;
@@ -254,8 +278,39 @@ public class TableFixHeaders extends ViewGroup {
 				shadowsVisibility();
 				break;
 			}
+			case MotionEvent.ACTION_UP: {
+				// http://stackoverflow.com/a/6483089/842697
+				final VelocityTracker velocityTracker = this.velocityTracker; // Find out how fast the finger was moving
+				velocityTracker.computeCurrentVelocity(1000, maximumVelocity);
+				int velocityX = (int) velocityTracker.getXVelocity();
+				int velocityY = (int) velocityTracker.getYVelocity();
+
+				System.out.println("   (" + velocityX + ", " + velocityY + ")");
+
+				if (Math.abs(velocityX) > minimumVelocity || Math.abs(velocityY) > minimumVelocity) { // if the velocity exceeds threshold
+					scroller.fling(getActualScrollX(), getActualScrollY(), -velocityX, -velocityY, 0, getMaxScrollX(), 0, getMaxScrollY()); // Do the filng
+				} else {
+					if (this.velocityTracker != null) { // If the velocity less than threshold
+						this.velocityTracker.recycle(); // recycle the tracker
+						this.velocityTracker = null;
+					}
+				}
+				break;
+			}
 		}
 		return true;
+	}
+
+	@Override
+	public void scrollTo(int x, int y) {
+		System.out.println("scrollTo(" + x + ", " + y + ");");
+		//		super.scrollTo(x, y);
+	}
+
+	@Override
+	public void scrollBy(int x, int y) {
+		System.out.println("scrollBy(" + x + ", " + y + ");");
+		//		super.scrollBy(x, y);
 	}
 
 	private int getActualScrollX() {
@@ -596,6 +651,14 @@ public class TableFixHeaders extends ViewGroup {
 			addView(view, getChildCount() - 5);
 		} else {
 			addView(view, 0);
+		}
+	}
+
+	@Override
+	public void computeScroll() { // Called while flinging to execute a fling step
+		if (scroller.computeScrollOffset()) {
+			scrollTo(0, scroller.getCurrY()); // Get where we should scroll to and do it
+			postInvalidate(); // the redraw the sreem
 		}
 	}
 
