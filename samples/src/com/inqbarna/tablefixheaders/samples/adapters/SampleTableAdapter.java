@@ -52,9 +52,11 @@ public abstract class SampleTableAdapter extends BaseTableAdapter {
 
 	@Override
 	public View getView(int row, int column, View converView, ViewGroup parent) {
-		final View view = inflater.inflate(getLayoutResource(row, column), parent, false);
-		setText(view, getCellString(row, column));
-		return view;
+		if (converView == null) {
+			converView = inflater.inflate(getLayoutResource(row, column), parent, false);
+		}
+		setText(converView, getCellString(row, column));
+		return converView;
 	}
 
 	/**

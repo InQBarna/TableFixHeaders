@@ -62,6 +62,8 @@ public class StyleTable extends Activity {
 		public int getLayoutResource(int row, int column) {
 			if (row < 0) {
 				return R.layout.item_table1_header;
+			} else if (row == 1) {
+				return R.layout.item_table2;
 			} else {
 				return R.layout.item_table1;
 			}
@@ -69,12 +71,18 @@ public class StyleTable extends Activity {
 
 		@Override
 		public int getItemViewType(int row, int column) {
-			return 0;
+			if (row < 0) {
+				return 0;
+			} else if (row == 1) {
+				return 1;
+			} else {
+				return 2;
+			}
 		}
 
 		@Override
 		public int getViewTypeCount() {
-			return 1;
+			return 3;
 		}
 	}
 }
