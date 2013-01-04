@@ -311,7 +311,10 @@ public class TableFixHeaders extends ViewGroup {
 	public void removeView(View view) {
 		super.removeView(view);
 
-		recycler.addRecycledView(view, (Integer) view.getTag(R.id.tag_type_view));
+		final int typeView = (Integer) view.getTag(R.id.tag_type_view);
+		if (typeView != TableAdapter.IGNORE_ITEM_VIEW_TYPE) {
+			recycler.addRecycledView(view, typeView);
+		}
 	}
 
 	private void repositionViews() {
@@ -514,7 +517,13 @@ public class TableFixHeaders extends ViewGroup {
 
 	private View makeView(int row, int column, int w, int h) {
 		final int itemViewType = adapter.getItemViewType(row, column);
-		final View view = adapter.getView(row, column, recycler.getRecycledView(itemViewType), this);
+		final View recycledView;
+		if (itemViewType == TableAdapter.IGNORE_ITEM_VIEW_TYPE) {
+			recycledView = null;
+		} else {
+			recycledView = recycler.getRecycledView(itemViewType);
+		}
+		final View view = adapter.getView(row, column, recycledView, this);
 		view.setTag(R.id.tag_type_view, itemViewType);
 		view.measure(MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY));
 		addTableView(view, row, column);

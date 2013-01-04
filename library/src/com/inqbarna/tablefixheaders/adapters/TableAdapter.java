@@ -16,6 +16,16 @@ import android.view.ViewGroup;
 public interface TableAdapter {
 
 	/**
+	 * An item view type that causes the AdapterView to ignore the item view.
+	 * For example, this can be used if the client does not want a particular
+	 * view to be given for conversion in
+	 * {@link #getView(int, int, View, ViewGroup)}.
+	 * 
+	 * @see #getItemViewType(int, int)
+	 */
+	public final static int IGNORE_ITEM_VIEW_TYPE = -1;
+
+	/**
 	 * Register an observer that is called when changes happen to the data used
 	 * by this adapter.
 	 * 
