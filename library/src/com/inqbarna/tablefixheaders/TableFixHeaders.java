@@ -301,7 +301,6 @@ public class TableFixHeaders extends ViewGroup {
 	}
 
 	private void addTopAndBottom(int row, int index) {
-		System.out.println(row + ", " + heights.length);
 		View view = makeView(row, -1, widths[0], heights[row + 1]);
 		columnViewList.add(index, view);
 
@@ -466,7 +465,7 @@ public class TableFixHeaders extends ViewGroup {
 	@SuppressLint("DrawAllocation")
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		System.out.println("boolean " + changed + ", int " + l + ", int " + t + ", int " + r + ", int " + b);
+		System.out.println("onLayout(boolean " + changed + ", int " + l + ", int " + t + ", int " + r + ", int " + b + ")");
 
 		if (needRelayout || changed) {
 			needRelayout = false;
