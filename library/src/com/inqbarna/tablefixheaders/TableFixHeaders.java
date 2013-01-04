@@ -363,8 +363,10 @@ public class TableFixHeaders extends ViewGroup {
 				heights[i + 1] += adapter.getHeight(i);
 			}
 
-			if (widthMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
+			if (widthMode == MeasureSpec.AT_MOST) {
 				w = Math.min(widthSize, sumArray(widths));
+			} else if (widthMode == MeasureSpec.UNSPECIFIED) {
+				w = sumArray(widths);
 			} else {
 				w = widthSize;
 				int sumArray = sumArray(widths);
@@ -377,8 +379,10 @@ public class TableFixHeaders extends ViewGroup {
 				}
 			}
 
-			if (heightMode == MeasureSpec.AT_MOST || heightMode == MeasureSpec.UNSPECIFIED) {
+			if (heightMode == MeasureSpec.AT_MOST) {
 				h = Math.min(heightSize, sumArray(heights));
+			} else if (heightMode == MeasureSpec.UNSPECIFIED) {
+				h = sumArray(heights);
 			} else {
 				h = heightSize;
 			}
