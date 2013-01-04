@@ -377,7 +377,7 @@ public class TableFixHeaders extends ViewGroup {
 				}
 			}
 
-			if (heightMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED) {
+			if (heightMode == MeasureSpec.AT_MOST || heightMode == MeasureSpec.UNSPECIFIED) {
 				h = Math.min(heightSize, sumArray(heights));
 			} else {
 				h = heightSize;
