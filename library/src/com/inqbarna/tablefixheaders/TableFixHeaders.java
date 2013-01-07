@@ -330,23 +330,19 @@ public class TableFixHeaders extends ViewGroup {
 	}
 
 	private void addLeft() {
-		System.out.println("addLeft");
 		addLeftOrRight(firstColumn - 1, 0);
 	}
 
 	private void addTop() {
-		System.out.println("addTop");
 		addTopAndBottom(firstRow - 1, 0);
 	}
 
 	private void addRight() {
-		System.out.println("addRight");
 		final int size = rowViewList.size();
 		addLeftOrRight(firstColumn + size, size);
 	}
 
 	private void addBottom() {
-		System.out.println("addBottom");
 		final int size = columnViewList.size();
 		addTopAndBottom(firstRow + size, size);
 	}
@@ -377,22 +373,18 @@ public class TableFixHeaders extends ViewGroup {
 	}
 
 	private void removeLeft() {
-		System.out.println("removeLeft");
 		removeLeftOrRight(0);
 	}
 
 	private void removeTop() {
-		System.out.println("removeTop");
 		removeTopOrBottom(0);
 	}
 
 	private void removeRight() {
-		System.out.println("removeRight");
 		removeLeftOrRight(rowViewList.size() - 1);
 	}
 
 	private void removeBottom() {
-		System.out.println("removeBottom");
 		removeTopOrBottom(columnViewList.size() - 1);
 	}
 
@@ -528,8 +520,6 @@ public class TableFixHeaders extends ViewGroup {
 	@SuppressLint("DrawAllocation")
 	@Override
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
-		System.out.println("onLayout(boolean " + changed + ", int " + l + ", int " + t + ", int " + r + ", int " + b + ")");
-
 		if (needRelayout || changed) {
 			needRelayout = false;
 			resetTable();
