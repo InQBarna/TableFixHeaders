@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.Scroller;
 
 /**
@@ -61,7 +60,7 @@ public class TableFixHeaders extends ViewGroup {
 	private final int minimumVelocity;
 	private final int maximumVelocity;
 
-	private final Scroller scroller;
+	private final Flinger flinger;
 
 	private VelocityTracker velocityTracker;
 
@@ -120,7 +119,7 @@ public class TableFixHeaders extends ViewGroup {
 
 		this.shadowSize = getResources().getDimensionPixelSize(R.dimen.shadow_size);
 
-		this.scroller = new Scroller(context);
+		this.flinger = new Flinger(context);
 		final ViewConfiguration configuration = ViewConfiguration.get(context);
 		this.minimumVelocity = configuration.getScaledMinimumFlingVelocity();
 		this.maximumVelocity = configuration.getScaledMaximumFlingVelocity();
@@ -191,8 +190,8 @@ public class TableFixHeaders extends ViewGroup {
 
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN: {
-				if (!scroller.isFinished()) { // If scrolling, then stop now
-					scroller.abortAnimation();
+				if (!flinger.isFinished()) { // If scrolling, then stop now
+					flinger.forceFinished();
 				}
 				currentX = (int) event.getRawX();
 				currentY = (int) event.getRawY();
@@ -206,89 +205,18 @@ public class TableFixHeaders extends ViewGroup {
 				currentX = x2;
 				currentY = y2;
 
-				scrollX += diffX;
-				scrollY += diffY;
-				final Boolean left = diffX == 0 ? null : diffX <= 0;
-				final Boolean up = diffY == 0 ? null : diffY <= 0;
-
-				// scroll bounds
-				if (scrollX == 0) {
-					// no op
-				} else if (scrollX < 0) {
-					scrollX = Math.max(scrollX, -sumArray(widths, 1, firstColumn));
-				} else {
-					scrollX = Math.min(scrollX, sumArray(widths, firstColumn + 1, columnCount - firstColumn) + widths[0] - width);
-				}
-
-				if (scrollY == 0) {
-					// no op
-				} else if (scrollY < 0) {
-					scrollY = Math.max(scrollY, -sumArray(heights, 1, firstRow));
-				} else {
-					scrollY = Math.min(scrollY, Math.max(0, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height));
-				}
-
-				// add or remove views
-				if (left == null) {
-					// no op
-				} else if (!left && scrollX != 0) {
-					while (widths[firstColumn + 1] < scrollX) {
-						removeLeft();
-						scrollX -= widths[firstColumn + 1];
-						firstColumn++;
-					}
-					while (getFilledWidth() < width) {
-						addRight();
-					}
-				} else if (left) {
-					while (getFilledWidth() - widths[firstColumn + rowViewList.size() - 1] >= width) {
-						removeRight();
-					}
-					while (0 > scrollX) {
-						addLeft();
-						firstColumn--;
-						scrollX += widths[firstColumn + 1];
-					}
-				}
-
-				if (up == null) {
-					// no op
-				} else if (!up && scrollY != 0) {
-					while (heights[firstRow + 1] < scrollY) {
-						removeTop();
-						scrollY -= heights[firstRow + 1];
-						firstRow++;
-					}
-					while (getFilledHeight() < height) {
-						addBottom();
-					}
-				} else if (up) {
-					while (getFilledHeight() - heights[firstRow + columnViewList.size() - 1] >= height) {
-						removeBottom();
-					}
-					while (0 > scrollY) {
-						addTop();
-						firstRow--;
-						scrollY += heights[firstRow + 1];
-					}
-				}
-
-				repositionViews();
-
-				shadowsVisibility();
+				scrollBy(diffX, diffY);
 				break;
 			}
 			case MotionEvent.ACTION_UP: {
-				// http://stackoverflow.com/a/6483089/842697
-				final VelocityTracker velocityTracker = this.velocityTracker; // Find out how fast the finger was moving
+				// http://stackoverflow.com/a/6219382/842697
+				final VelocityTracker velocityTracker = this.velocityTracker;
 				velocityTracker.computeCurrentVelocity(1000, maximumVelocity);
 				int velocityX = (int) velocityTracker.getXVelocity();
 				int velocityY = (int) velocityTracker.getYVelocity();
 
-				System.out.println("   (" + velocityX + ", " + velocityY + ")");
-
-				if (Math.abs(velocityX) > minimumVelocity || Math.abs(velocityY) > minimumVelocity) { // if the velocity exceeds threshold
-					scroller.fling(getActualScrollX(), getActualScrollY(), -velocityX, -velocityY, 0, getMaxScrollX(), 0, getMaxScrollY()); // Do the filng
+				if (Math.abs(velocityX) > minimumVelocity || Math.abs(velocityY) > minimumVelocity) {
+					flinger.start(getActualScrollX(), getActualScrollY(), velocityX, velocityY, getMaxScrollX(), getMaxScrollY());
 				} else {
 					if (this.velocityTracker != null) { // If the velocity less than threshold
 						this.velocityTracker.recycle(); // recycle the tracker
@@ -303,14 +231,78 @@ public class TableFixHeaders extends ViewGroup {
 
 	@Override
 	public void scrollTo(int x, int y) {
-		System.out.println("scrollTo(" + x + ", " + y + ");");
-		//		super.scrollTo(x, y);
+		// TODO implement
 	}
 
 	@Override
 	public void scrollBy(int x, int y) {
-		System.out.println("scrollBy(" + x + ", " + y + ");");
-		//		super.scrollBy(x, y);
+		scrollX += x;
+		scrollY += y;
+
+		// scroll bounds
+		if (scrollX == 0) {
+			// no op
+		} else if (scrollX < 0) {
+			scrollX = Math.max(scrollX, -sumArray(widths, 1, firstColumn));
+		} else {
+			scrollX = Math.min(scrollX, sumArray(widths, firstColumn + 1, columnCount - firstColumn) + widths[0] - width);
+		}
+
+		if (scrollY == 0) {
+			// no op
+		} else if (scrollY < 0) {
+			scrollY = Math.max(scrollY, -sumArray(heights, 1, firstRow));
+		} else {
+			scrollY = Math.min(scrollY, Math.max(0, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height));
+		}
+
+		if (x == 0) {
+			// no op
+		} else if (x > 0) {
+			while (widths[firstColumn + 1] < scrollX) {
+				removeLeft();
+				scrollX -= widths[firstColumn + 1];
+				firstColumn++;
+			}
+			while (getFilledWidth() < width) {
+				addRight();
+			}
+		} else {
+			while (getFilledWidth() - widths[firstColumn + rowViewList.size() - 1] >= width) {
+				removeRight();
+			}
+			while (0 > scrollX) {
+				addLeft();
+				firstColumn--;
+				scrollX += widths[firstColumn + 1];
+			}
+		}
+
+		if (y == 0) {
+			// no op
+		} else if (y > 0) {
+			while (heights[firstRow + 1] < scrollY) {
+				removeTop();
+				scrollY -= heights[firstRow + 1];
+				firstRow++;
+			}
+			while (getFilledHeight() < height) {
+				addBottom();
+			}
+		} else {
+			while (getFilledHeight() - heights[firstRow + columnViewList.size() - 1] >= height) {
+				removeBottom();
+			}
+			while (0 > scrollY) {
+				addTop();
+				firstRow--;
+				scrollY += heights[firstRow + 1];
+			}
+		}
+
+		repositionViews();
+
+		shadowsVisibility();
 	}
 
 	private int getActualScrollX() {
@@ -654,14 +646,6 @@ public class TableFixHeaders extends ViewGroup {
 		}
 	}
 
-	@Override
-	public void computeScroll() { // Called while flinging to execute a fling step
-		if (scroller.computeScrollOffset()) {
-			scrollTo(0, scroller.getCurrY()); // Get where we should scroll to and do it
-			postInvalidate(); // the redraw the sreem
-		}
-	}
-
 	private class TableAdapterDataSetObserver extends DataSetObserver {
 
 		@Override
@@ -673,6 +657,56 @@ public class TableFixHeaders extends ViewGroup {
 		@Override
 		public void onInvalidated() {
 			// Do nothing
+		}
+	}
+
+	private class Flinger implements Runnable {
+		private final Scroller scroller;
+
+		private int lastX = 0;
+		private int lastY = 0;
+
+		Flinger(Context context) {
+			scroller = new Scroller(context);
+		}
+
+		void start(int initX, int initY, int initialVelocityX, int initialVelocityY, int maxX, int maxY) {
+			scroller.fling(initX, initY, initialVelocityX, initialVelocityY, 0, maxX, 0, maxY);
+
+			lastX = initX;
+			lastY = initY;
+			post(this);
+		}
+
+		public void run() {
+			if (scroller.isFinished()) {
+				return;
+			}
+
+			boolean more = scroller.computeScrollOffset();
+			int x = scroller.getCurrX();
+			int y = scroller.getCurrY();
+			int diffX = lastX - x;
+			int diffY = lastY - y;
+			if (diffX != 0 || diffY != 0) {
+				scrollBy(diffX, diffY);
+				lastX = x;
+				lastY = y;
+			}
+
+			if (more) {
+				post(this);
+			}
+		}
+
+		boolean isFinished() {
+			return scroller.isFinished();
+		}
+
+		void forceFinished() {
+			if (!scroller.isFinished()) {
+				scroller.forceFinished(true);
+			}
 		}
 	}
 }
