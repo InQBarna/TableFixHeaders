@@ -6,7 +6,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 
 import com.inqbarna.tablefixheaders.TableFixHeaders;
-import com.inqbarna.tablefixheaders.samples.adapters.BaseTableAdapter;
+import com.inqbarna.tablefixheaders.samples.adapters.SampleTableAdapter;
 
 public class StyleTable extends Activity {
 
@@ -19,7 +19,7 @@ public class StyleTable extends Activity {
 		tableFixHeaders.setAdapter(new MyAdapter(this));
 	}
 
-	public class MyAdapter extends BaseTableAdapter {
+	public class MyAdapter extends SampleTableAdapter {
 
 		private final int width;
 		private final int height;
@@ -35,12 +35,12 @@ public class StyleTable extends Activity {
 
 		@Override
 		public int getRowCount() {
-			return 25;
+			return 10;
 		}
 
 		@Override
 		public int getColumnCount() {
-			return 7;
+			return 6;
 		}
 
 		@Override
@@ -60,11 +60,32 @@ public class StyleTable extends Activity {
 
 		@Override
 		public int getLayoutResource(int row, int column) {
-			if (row < 0) {
-				return R.layout.item_table1_header;
-			} else {
-				return R.layout.item_table1;
+			final int layoutResource;
+			switch (getItemViewType(row, column)) {
+				case 0:
+					layoutResource = R.layout.item_table1_header;
+				break;
+				case 1:
+					layoutResource = R.layout.item_table1;
+				break;
+				default:
+					throw new RuntimeException("wtf?");
 			}
+			return layoutResource;
+		}
+
+		@Override
+		public int getItemViewType(int row, int column) {
+			if (row < 0) {
+				return 0;
+			} else {
+				return 1;
+			}
+		}
+
+		@Override
+		public int getViewTypeCount() {
+			return 3;
 		}
 	}
 }

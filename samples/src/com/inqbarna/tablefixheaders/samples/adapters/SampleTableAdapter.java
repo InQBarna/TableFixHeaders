@@ -1,7 +1,6 @@
 package com.inqbarna.tablefixheaders.samples.adapters;
 
-
-import com.inqbarna.tablefixheaders.adapters.TableAdapter;
+import com.inqbarna.tablefixheaders.adapters.BaseTableAdapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,7 +15,7 @@ import android.widget.TextView;
  * 
  * @author Brais Gabín
  */
-public abstract class BaseTableAdapter implements TableAdapter {
+public abstract class SampleTableAdapter extends BaseTableAdapter {
 	private final Context context;
 	private final LayoutInflater inflater;
 
@@ -26,7 +25,7 @@ public abstract class BaseTableAdapter implements TableAdapter {
 	 * @param context
 	 *            The current context.
 	 */
-	public BaseTableAdapter(Context context) {
+	public SampleTableAdapter(Context context) {
 		this.context = context;
 		inflater = LayoutInflater.from(context);
 	}
@@ -52,10 +51,12 @@ public abstract class BaseTableAdapter implements TableAdapter {
 	}
 
 	@Override
-	public View getView(int row, int column, ViewGroup parent) {
-		final View view = inflater.inflate(getLayoutResource(row, column), parent, false);
-		setText(view, getCellString(row, column));
-		return view;
+	public View getView(int row, int column, View converView, ViewGroup parent) {
+		if (converView == null) {
+			converView = inflater.inflate(getLayoutResource(row, column), parent, false);
+		}
+		setText(converView, getCellString(row, column));
+		return converView;
 	}
 
 	/**
