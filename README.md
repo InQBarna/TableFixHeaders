@@ -1,4 +1,4 @@
-# ActionBarSherlock
+# TableFixHeaders
 ## What is it?
 TableFixHeaders is an Android widget to display tables width headers.
 
