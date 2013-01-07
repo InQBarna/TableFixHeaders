@@ -30,6 +30,10 @@
             android:name="com.inqbarna.tablefixheaders.samples.StyleTable"
             android:label="@string/style_adapter" >
         </activity>
+        <activity
+            android:name="com.inqbarna.tablefixheaders.samples.FamilyTable"
+            android:label="@string/style_adapter" >
+        </activity>
     </application>
 
 </manifest>

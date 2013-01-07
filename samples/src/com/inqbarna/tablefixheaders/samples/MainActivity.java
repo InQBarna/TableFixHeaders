@@ -18,6 +18,7 @@ public class MainActivity extends ListActivity {
 		B b[] = new B[] {
 				new B(getString(R.string.simple_adapter), SimpleTable.class),
 				new B(getString(R.string.style_adapter), StyleTable.class),
+				new B(getString(R.string.family_adapter), FamilyTable.class),
 		};
 		setListAdapter(new ArrayAdapter<B>(this, android.R.layout.simple_list_item_1, android.R.id.text1, b));
 	}

@@ -4,5 +4,6 @@
     <string name="app_name">TableFixHeaders Samples</string>
     <string name="simple_adapter">Simple adapter</string>
     <string name="style_adapter">Style adapter</string>
+    <string name="family_adapter">Family adapter</string>
 
 </resources>
