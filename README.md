@@ -15,14 +15,13 @@ TableFixHeaders is an Android widget to display tables width headers.
 * Shadows when there are more info to scroll. 
 
 ## Sample
-You can download the app test from here: 
+You can download the app test from here: http://adhoc.inqbarna.com/com.inqbarna.tablefixheaders/TableFixHeaders_Samples.apk
 
 ![QR](https://raw.github.com/InQBarna/TableFixHeaders/master/web/qr.png "Sample")
 
-http://adhoc.inqbarna.com/com.inqbarna.tablefixheaders/TableFixHeaders_Samples.apk
-
 ## Screenshots
 ![Screenshot 1](https://raw.github.com/InQBarna/TableFixHeaders/master/web/screen1.png "Screenshot 1")
+
 ![Screenshot 2](https://raw.github.com/InQBarna/TableFixHeaders/master/web/screen2.png "Screenshot 2")
 
 ## License
