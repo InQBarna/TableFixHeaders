@@ -209,7 +209,6 @@ public class TableFixHeaders extends ViewGroup {
 				break;
 			}
 			case MotionEvent.ACTION_UP: {
-				// http://stackoverflow.com/a/6219382/842697
 				final VelocityTracker velocityTracker = this.velocityTracker;
 				velocityTracker.computeCurrentVelocity(1000, maximumVelocity);
 				int velocityX = (int) velocityTracker.getXVelocity();
@@ -650,6 +649,7 @@ public class TableFixHeaders extends ViewGroup {
 		}
 	}
 
+	// http://stackoverflow.com/a/6219382/842697
 	private class Flinger implements Runnable {
 		private final Scroller scroller;
 
