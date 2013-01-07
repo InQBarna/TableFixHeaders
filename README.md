@@ -12,7 +12,13 @@ TableFixHeaders is an Android widget to display tables with headers.
 
 * Recycling of views.
 
-* Shadows when there is more info to scroll. 
+* Shadows when there is more info to scroll.
+
+## Technical information
+
+* Required minimum API level: 4
+
+* Supports all the screens sizes and density.
 
 ## Sample
 You can download the app test from here: http://bit.ly/13buAIq
