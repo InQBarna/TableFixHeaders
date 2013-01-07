@@ -1,10 +1,10 @@
 # TableFixHeaders
 ## What is it?
-TableFixHeaders is an Android widget to display tables width headers.
+TableFixHeaders is an Android widget to display tables with headers.
 
 ## Features
 
-* Adapter class to fill the table in a easy way.
+* Adapter class to fill the table in an easy way.
 
 * Own scroll.
 
@@ -12,10 +12,10 @@ TableFixHeaders is an Android widget to display tables width headers.
 
 * Recycling of views.
 
-* Shadows when there are more info to scroll. 
+* Shadows when there is more info to scroll. 
 
 ## Sample
-You can download the app test from here: http://adhoc.inqbarna.com/com.inqbarna.tablefixheaders/TableFixHeaders_Samples.apk
+You can download the app test from here: http://bit.ly/13buAIq
 
 ![QR](https://raw.github.com/InQBarna/TableFixHeaders/master/web/qr.png "Sample")
 
