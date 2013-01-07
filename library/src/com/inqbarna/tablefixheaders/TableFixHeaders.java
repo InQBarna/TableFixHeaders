@@ -255,9 +255,9 @@ public class TableFixHeaders extends ViewGroup {
 			scrollY = Math.min(scrollY, Math.max(0, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height));
 		}
 
-		if (x == 0) {
+		if (scrollX == 0) {
 			// no op
-		} else if (x > 0) {
+		} else if (scrollX > 0) {
 			while (widths[firstColumn + 1] < scrollX) {
 				removeLeft();
 				scrollX -= widths[firstColumn + 1];
@@ -277,9 +277,9 @@ public class TableFixHeaders extends ViewGroup {
 			}
 		}
 
-		if (y == 0) {
+		if (scrollY == 0) {
 			// no op
-		} else if (y > 0) {
+		} else if (scrollY > 0) {
 			while (heights[firstRow + 1] < scrollY) {
 				removeTop();
 				scrollY -= heights[firstRow + 1];
