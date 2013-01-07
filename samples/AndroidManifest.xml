@@ -24,10 +24,12 @@
         </activity>
         <activity
             android:name="com.inqbarna.tablefixheaders.samples.SimpleTable"
-            android:label="@string/simple_adapter" />
+            android:label="@string/simple_adapter" >
+        </activity>
         <activity
             android:name="com.inqbarna.tablefixheaders.samples.StyleTable"
-            android:label="@string/style_adapter" />
+            android:label="@string/style_adapter" >
+        </activity>
     </application>
 
 </manifest>
