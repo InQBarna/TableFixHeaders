@@ -24,8 +24,6 @@ import android.widget.Scroller;
  * @author Brais Gabín (InQBarna)
  */
 public class TableFixHeaders extends ViewGroup {
-	private final static int CLICK_SENSIVILITY = 2;
-
 	private int currentX;
 	private int currentY;
 
@@ -63,6 +61,8 @@ public class TableFixHeaders extends ViewGroup {
 	private final Flinger flinger;
 
 	private VelocityTracker velocityTracker;
+
+	private int touchSlop;
 
 	/**
 	 * Simple constructor to use when creating a view from code.
@@ -121,6 +121,7 @@ public class TableFixHeaders extends ViewGroup {
 
 		this.flinger = new Flinger(context);
 		final ViewConfiguration configuration = ViewConfiguration.get(context);
+		this.touchSlop = configuration.getScaledTouchSlop();
 		this.minimumVelocity = configuration.getScaledMinimumFlingVelocity();
 		this.maximumVelocity = configuration.getScaledMaximumFlingVelocity();
 	}
@@ -170,9 +171,9 @@ public class TableFixHeaders extends ViewGroup {
 				break;
 			}
 			case MotionEvent.ACTION_MOVE: {
-				int x2 = currentX - (int) event.getRawX();
-				int y2 = currentY - (int) event.getRawY();
-				if (x2 < -CLICK_SENSIVILITY || x2 > CLICK_SENSIVILITY || y2 < -CLICK_SENSIVILITY || y2 > CLICK_SENSIVILITY) {
+				int x2 = Math.abs(currentX - (int) event.getRawX());
+				int y2 = Math.abs(currentY - (int) event.getRawY());
+				if (x2 > touchSlop || y2 > touchSlop) {
 					intercept = true;
 				}
 				break;
