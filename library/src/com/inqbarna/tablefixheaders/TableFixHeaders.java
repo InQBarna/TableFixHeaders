@@ -305,11 +305,11 @@ public class TableFixHeaders extends ViewGroup {
 		shadowsVisibility();
 	}
 
-	private int getActualScrollX() {
+	public int getActualScrollX() {
 		return scrollX + sumArray(widths, 1, firstColumn);
 	}
 
-	private int getActualScrollY() {
+	public int getActualScrollY() {
 		return scrollY + sumArray(heights, 1, firstRow);
 	}
 
