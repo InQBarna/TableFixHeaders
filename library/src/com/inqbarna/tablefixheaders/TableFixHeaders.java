@@ -154,9 +154,6 @@ public class TableFixHeaders extends ViewGroup {
 
 		this.recycler = new Recycler(adapter.getViewTypeCount());
 
-		this.rowCount = adapter.getRowCount();
-		this.columnCount = adapter.getColumnCount();
-
 		needRelayout = true;
 		requestLayout();
 	}
@@ -454,6 +451,9 @@ public class TableFixHeaders extends ViewGroup {
 		final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 		final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 		final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+		this.rowCount = adapter.getRowCount();
+		this.columnCount = adapter.getColumnCount();
 
 		final int w;
 		final int h;
