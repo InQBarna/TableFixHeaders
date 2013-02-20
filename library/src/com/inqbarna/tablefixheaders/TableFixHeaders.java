@@ -452,13 +452,13 @@ public class TableFixHeaders extends ViewGroup {
 		final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 		final int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
-		this.rowCount = adapter.getRowCount();
-		this.columnCount = adapter.getColumnCount();
-
 		final int w;
 		final int h;
 
 		if (adapter != null) {
+			this.rowCount = adapter.getRowCount();
+			this.columnCount = adapter.getColumnCount();
+
 			widths = new int[columnCount + 1];
 			for (int i = -1; i < columnCount; i++) {
 				widths[i + 1] += adapter.getWidth(i);
