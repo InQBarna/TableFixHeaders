@@ -6,8 +6,10 @@ import java.util.List;
 import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -575,7 +577,6 @@ public class TableFixHeaders extends ViewGroup {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	private void shadowsVisibility() {
 		final int actualScrollX = getActualScrollX();
 		final int actualScrollY = getActualScrollY();
@@ -587,7 +588,17 @@ public class TableFixHeaders extends ViewGroup {
 		};
 
 		for (int i = 0; i < shadows.length; i++) {
-			shadows[i].setAlpha(Math.round((remainPixels[i] < shadowSize ? (remainPixels[i] * 255) / (float) shadowSize : 255)));
+			setAlpha(shadows[i], Math.min(remainPixels[i] / (float) shadowSize, 1));
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	@SuppressWarnings("deprecation")
+	private void setAlpha(ImageView imageView, float alpha) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			imageView.setAlpha(alpha);
+		} else {
+			imageView.setAlpha(Math.round(alpha * 255));
 		}
 	}
 
