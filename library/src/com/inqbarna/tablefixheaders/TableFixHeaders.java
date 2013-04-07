@@ -96,12 +96,6 @@ public class TableFixHeaders extends ViewGroup {
 	public TableFixHeaders(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		this.firstRow = 0;
-		this.firstColumn = 0;
-
-		this.scrollX = 0;
-		this.scrollY = 0;
-
 		this.headView = null;
 		this.rowViewList = new ArrayList<View>();
 		this.columnViewList = new ArrayList<View>();
@@ -644,6 +638,11 @@ public class TableFixHeaders extends ViewGroup {
 		bodyViewTable.clear();
 
 		removeAllViews();
+
+		this.firstRow = 0;
+		this.firstColumn = 0;
+		this.scrollX = 0;
+		this.scrollY = 0;
 	}
 
 	private View makeAndSetup(int row, int column, int left, int top, int right, int bottom) {
