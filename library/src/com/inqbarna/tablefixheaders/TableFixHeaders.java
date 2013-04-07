@@ -255,11 +255,19 @@ public class TableFixHeaders extends ViewGroup {
 			scrollY = Math.min(scrollY, Math.max(0, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height));
 		}
 
+		/*
+		 * TODO Improve the algorithm. Think big diagonal movements. If we are
+		 * in the top left corner and scrollBy to the opposite corner. We will
+		 * have created the views from the top right corner on the X part and we
+		 * will have eliminated to generate the right at the Y.
+		 */
 		if (scrollX == 0) {
 			// no op
 		} else if (scrollX > 0) {
 			while (widths[firstColumn + 1] < scrollX) {
-				removeLeft();
+				if (!rowViewList.isEmpty()) {
+					removeLeft();
+				}
 				scrollX -= widths[firstColumn + 1];
 				firstColumn++;
 			}
@@ -267,13 +275,23 @@ public class TableFixHeaders extends ViewGroup {
 				addRight();
 			}
 		} else {
-			while (getFilledWidth() - widths[firstColumn + rowViewList.size() - 1] >= width) {
+			while (!rowViewList.isEmpty() && getFilledWidth() - widths[firstColumn + rowViewList.size() - 1] >= width) {
 				removeRight();
 			}
-			while (0 > scrollX) {
-				addLeft();
-				firstColumn--;
-				scrollX += widths[firstColumn + 1];
+			if (rowViewList.isEmpty()) {
+				while (scrollX < 0) {
+					firstColumn--;
+					scrollX += widths[firstColumn + 1];
+				}
+				while (getFilledWidth() < width) {
+					addRight();
+				}
+			} else {
+				while (0 > scrollX) {
+					addLeft();
+					firstColumn--;
+					scrollX += widths[firstColumn + 1];
+				}
 			}
 		}
 
@@ -281,7 +299,9 @@ public class TableFixHeaders extends ViewGroup {
 			// no op
 		} else if (scrollY > 0) {
 			while (heights[firstRow + 1] < scrollY) {
-				removeTop();
+				if (!columnViewList.isEmpty()) {
+					removeTop();
+				}
 				scrollY -= heights[firstRow + 1];
 				firstRow++;
 			}
@@ -289,13 +309,23 @@ public class TableFixHeaders extends ViewGroup {
 				addBottom();
 			}
 		} else {
-			while (getFilledHeight() - heights[firstRow + columnViewList.size() - 1] >= height) {
+			while (!columnViewList.isEmpty() && getFilledHeight() - heights[firstRow + columnViewList.size() - 1] >= height) {
 				removeBottom();
 			}
-			while (0 > scrollY) {
-				addTop();
-				firstRow--;
-				scrollY += heights[firstRow + 1];
+			if (columnViewList.isEmpty()) {
+				while (scrollY < 0) {
+					firstRow--;
+					scrollY += heights[firstRow + 1];
+				}
+				while (getFilledHeight() < height) {
+					addBottom();
+				}
+			} else {
+				while (0 > scrollY) {
+					addTop();
+					firstRow--;
+					scrollY += heights[firstRow + 1];
+				}
 			}
 		}
 
