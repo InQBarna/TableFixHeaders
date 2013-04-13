@@ -241,7 +241,6 @@ public class TableFixHeaders extends ViewGroup {
 			return;
 		}
 
-		// scroll bounds
 		scrollBounds();
 
 		/*
@@ -264,7 +263,7 @@ public class TableFixHeaders extends ViewGroup {
 				addRight();
 			}
 		} else {
-			while (!rowViewList.isEmpty() && getFilledWidth() - widths[firstColumn + rowViewList.size() - 1] >= width) {
+			while (!rowViewList.isEmpty() && getFilledWidth() - widths[firstColumn + rowViewList.size()] >= width) {
 				removeRight();
 			}
 			if (rowViewList.isEmpty()) {
@@ -298,7 +297,7 @@ public class TableFixHeaders extends ViewGroup {
 				addBottom();
 			}
 		} else {
-			while (!columnViewList.isEmpty() && getFilledHeight() - heights[firstRow + columnViewList.size() - 1] >= height) {
+			while (!columnViewList.isEmpty() && getFilledHeight() - heights[firstRow + columnViewList.size()] >= height) {
 				removeBottom();
 			}
 			if (columnViewList.isEmpty()) {
