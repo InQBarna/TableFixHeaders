@@ -229,7 +229,15 @@ public class TableFixHeaders extends ViewGroup {
 
 	@Override
 	public void scrollTo(int x, int y) {
-		// TODO implement
+		if (needRelayout) {
+			scrollX = x;
+			firstColumn = 0;
+
+			scrollY = y;
+			firstRow = 0;
+		} else {
+			scrollBy(x - sumArray(widths, 1, firstColumn) - scrollX, y - sumArray(heights, 1, firstRow) - scrollY);
+		}
 	}
 
 	@Override
