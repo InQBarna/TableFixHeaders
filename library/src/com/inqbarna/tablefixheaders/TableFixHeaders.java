@@ -150,6 +150,11 @@ public class TableFixHeaders extends ViewGroup {
 
 		this.recycler = new Recycler(adapter.getViewTypeCount());
 
+		scrollX = 0;
+		scrollY = 0;
+		firstColumn = 0;
+		firstRow = 0;
+
 		needRelayout = true;
 		requestLayout();
 	}
@@ -227,29 +232,17 @@ public class TableFixHeaders extends ViewGroup {
 		// TODO implement
 	}
 
-	private int scrollBounds(int desiredScroll, int firstCell, int sizes[], int viewSize) {
-		if (desiredScroll == 0) {
-			// no op
-		} else if (desiredScroll < 0) {
-			desiredScroll = Math.max(desiredScroll, -sumArray(sizes, 1, firstCell));
-		} else {
-			desiredScroll = Math.min(desiredScroll, sumArray(sizes, firstCell + 1, sizes.length - 1 - firstCell) + sizes[0] - viewSize);
-		}
-		return desiredScroll;
-	}
-
 	@Override
 	public void scrollBy(int x, int y) {
-		/*
-		 * TODO Improve this function. If the table have an adapter but not
-		 * layout I can precalculate the scroll. #10
-		 */
 		scrollX += x;
 		scrollY += y;
 
+		if (needRelayout) {
+			return;
+		}
+
 		// scroll bounds
-		scrollX = scrollBounds(scrollX, firstColumn, widths, width);
-		scrollY = scrollBounds(scrollY, firstRow, heights, height);
+		scrollBounds();
 
 		/*
 		 * TODO Improve the algorithm. Think big diagonal movements. If we are
@@ -567,6 +560,9 @@ public class TableFixHeaders extends ViewGroup {
 
 				headView = makeAndSetup(-1, -1, 0, 0, widths[0], heights[0]);
 
+				scrollBounds();
+				adjustFirstCellsAndScroll();
+
 				left = widths[0] - scrollX;
 				for (int i = firstColumn; i < columnCount && left < width; i++) {
 					right = left + widths[i + 1];
@@ -601,6 +597,51 @@ public class TableFixHeaders extends ViewGroup {
 				shadowsVisibility();
 			}
 		}
+	}
+
+	private void scrollBounds() {
+		scrollX = scrollBounds(scrollX, firstColumn, widths, width);
+		scrollY = scrollBounds(scrollY, firstRow, heights, height);
+	}
+
+	private int scrollBounds(int desiredScroll, int firstCell, int sizes[], int viewSize) {
+		if (desiredScroll == 0) {
+			// no op
+		} else if (desiredScroll < 0) {
+			desiredScroll = Math.max(desiredScroll, -sumArray(sizes, 1, firstCell));
+		} else {
+			desiredScroll = Math.min(desiredScroll, sumArray(sizes, firstCell + 1, sizes.length - 1 - firstCell) + sizes[0] - viewSize);
+		}
+		return desiredScroll;
+	}
+
+	private void adjustFirstCellsAndScroll() {
+		int values[];
+
+		values = adjustFirstCellsAndScroll(scrollX, firstColumn, widths);
+		scrollX = values[0];
+		firstColumn = values[1];
+
+		values = adjustFirstCellsAndScroll(scrollY, firstRow, heights);
+		scrollY = values[0];
+		firstRow = values[1];
+	}
+
+	private int[] adjustFirstCellsAndScroll(int scroll, int firstCell, int sizes[]) {
+		if (scroll == 0) {
+			// no op
+		} else if (scroll > 0) {
+			while (sizes[firstCell + 1] < scroll) {
+				firstCell++;
+				scroll -= sizes[firstCell];
+			}
+		} else {
+			while (scroll < 0) {
+				scroll += sizes[firstCell];
+				firstCell--;
+			}
+		}
+		return new int[] { scroll, firstCell };
 	}
 
 	private void shadowsVisibility() {
@@ -640,11 +681,6 @@ public class TableFixHeaders extends ViewGroup {
 		bodyViewTable.clear();
 
 		removeAllViews();
-
-		this.firstRow = 0;
-		this.firstColumn = 0;
-		this.scrollX = 0;
-		this.scrollY = 0;
 	}
 
 	private View makeAndSetup(int row, int column, int left, int top, int right, int bottom) {
