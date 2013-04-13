@@ -609,7 +609,7 @@ public class TableFixHeaders extends ViewGroup {
 		} else if (desiredScroll < 0) {
 			desiredScroll = Math.max(desiredScroll, -sumArray(sizes, 1, firstCell));
 		} else {
-			desiredScroll = Math.min(desiredScroll, sumArray(sizes, firstCell + 1, sizes.length - 1 - firstCell) + sizes[0] - viewSize);
+			desiredScroll = Math.min(desiredScroll, Math.max(0, sumArray(sizes, firstCell + 1, sizes.length - 1 - firstCell) + sizes[0] - viewSize));
 		}
 		return desiredScroll;
 	}
