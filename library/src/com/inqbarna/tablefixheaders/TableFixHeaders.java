@@ -227,9 +227,20 @@ public class TableFixHeaders extends ViewGroup {
 		// TODO implement
 	}
 
+	private int scrollBounds(int desiredScroll, int firstCell, int sizes[], int viewSize) {
+		if (desiredScroll == 0) {
+			// no op
+		} else if (desiredScroll < 0) {
+			desiredScroll = Math.max(desiredScroll, -sumArray(sizes, 1, firstCell));
+		} else {
+			desiredScroll = Math.min(desiredScroll, sumArray(sizes, firstCell + 1, sizes.length - 1 - firstCell) + sizes[0] - viewSize);
+		}
+		return desiredScroll;
+	}
+
 	@Override
 	public void scrollBy(int x, int y) {
-		/**
+		/*
 		 * TODO Improve this function. If the table have an adapter but not
 		 * layout I can precalculate the scroll. #10
 		 */
@@ -237,21 +248,8 @@ public class TableFixHeaders extends ViewGroup {
 		scrollY += y;
 
 		// scroll bounds
-		if (scrollX == 0) {
-			// no op
-		} else if (scrollX < 0) {
-			scrollX = Math.max(scrollX, -sumArray(widths, 1, firstColumn));
-		} else {
-			scrollX = Math.min(scrollX, sumArray(widths, firstColumn + 1, columnCount - firstColumn) + widths[0] - width);
-		}
-
-		if (scrollY == 0) {
-			// no op
-		} else if (scrollY < 0) {
-			scrollY = Math.max(scrollY, -sumArray(heights, 1, firstRow));
-		} else {
-			scrollY = Math.min(scrollY, Math.max(0, sumArray(heights, firstRow + 1, rowCount - firstRow) + heights[0] - height));
-		}
+		scrollX = scrollBounds(scrollX, firstColumn, widths, width);
+		scrollY = scrollBounds(scrollY, firstRow, heights, height);
 
 		/*
 		 * TODO Improve the algorithm. Think big diagonal movements. If we are
