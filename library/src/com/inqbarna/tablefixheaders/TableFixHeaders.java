@@ -233,7 +233,6 @@ public class TableFixHeaders extends ViewGroup {
 		 * TODO Improve this function. If the table have an adapter but not
 		 * layout I can precalculate the scroll. #10
 		 */
-		if (widths != null && heights != null) {
 		scrollX += x;
 		scrollY += y;
 
@@ -331,7 +330,6 @@ public class TableFixHeaders extends ViewGroup {
 		repositionViews();
 
 		shadowsVisibility();
-		}
 	}
 
 	public int getActualScrollX() {
