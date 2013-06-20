@@ -529,6 +529,15 @@ public class TableFixHeaders extends ViewGroup {
 			}
 		}
 
+		if (firstRow >= rowCount || getMaxScrollY() - getActualScrollY() < 0) {
+			firstRow = 0;
+			scrollY = Integer.MAX_VALUE;
+		}
+		if (firstColumn >= columnCount || getMaxScrollX() - getActualScrollX() < 0) {
+			firstColumn = 0;
+			scrollX = Integer.MAX_VALUE;
+		}
+
 		setMeasuredDimension(w, h);
 	}
 
