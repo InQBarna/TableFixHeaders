@@ -85,7 +85,7 @@ public class StyleTable extends Activity {
 
 		@Override
 		public int getViewTypeCount() {
-			return 3;
+			return 2;
 		}
 	}
 }
