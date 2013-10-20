@@ -9,6 +9,7 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DataSetObserver;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -705,6 +706,31 @@ public class TableFixHeaders extends ViewGroup {
 		return view;
 	}
 
+	@Override
+	protected boolean drawChild(Canvas canvas, View child, long drawingTime) {
+		final boolean ret;
+
+		final Integer row = (Integer) child.getTag(R.id.tag_row);
+		final Integer column = (Integer) child.getTag(R.id.tag_column);
+		// row == null => Shadow view
+		if (row == null || (row == -1 && column == -1)) {
+			ret = super.drawChild(canvas, child, drawingTime);
+		} else {
+			canvas.save();
+			if (row == -1) {
+				canvas.clipRect(widths[0], 0, canvas.getWidth(), canvas.getHeight());
+			} else if (column == -1) {
+				canvas.clipRect(0, heights[0], canvas.getWidth(), canvas.getHeight());
+			} else {
+				canvas.clipRect(widths[0], heights[0], canvas.getWidth(), canvas.getHeight());
+			}
+
+			ret = super.drawChild(canvas, child, drawingTime);
+			canvas.restore();
+		}
+		return ret;
+	}
+
 	private View makeView(int row, int column, int w, int h) {
 		final int itemViewType = adapter.getItemViewType(row, column);
 		final View recycledView;
@@ -715,6 +741,8 @@ public class TableFixHeaders extends ViewGroup {
 		}
 		final View view = adapter.getView(row, column, recycledView, this);
 		view.setTag(R.id.tag_type_view, itemViewType);
+		view.setTag(R.id.tag_row, row);
+		view.setTag(R.id.tag_column, column);
 		view.measure(MeasureSpec.makeMeasureSpec(w, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(h, MeasureSpec.EXACTLY));
 		addTableView(view, row, column);
 		return view;
