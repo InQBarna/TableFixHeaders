@@ -83,11 +83,7 @@ public class FamilyTable extends Activity {
 		private final float density;
 
 		public FamilyNexusAdapter(Context context) {
-			familys = new NexusTypes[] {
-					new NexusTypes("Mobiles"),
-					new NexusTypes("Tablets"),
-					new NexusTypes("Others"),
-			};
+			familys = new NexusTypes("Mobiles");
 
 			density = context.getResources().getDisplayMetrics().density;
 
@@ -130,9 +126,6 @@ public class FamilyTable extends Activity {
 				case 3:
 					view = getBody(row, column, convertView, parent);
 				break;
-				case 4:
-					view = getFamilyView(row, column, convertView, parent);
-				break;
 				default:
 					throw new RuntimeException("wtf?");
 			}
@@ -173,20 +166,6 @@ public class FamilyTable extends Activity {
 			return convertView;
 		}
 
-		private View getFamilyView(int row, int column, View convertView, ViewGroup parent) {
-			if (convertView == null) {
-				convertView = getLayoutInflater().inflate(R.layout.item_table_family, parent, false);
-			}
-			final String string;
-			if (column == -1) {
-				string = getFamily(row).name;
-			} else {
-				string = "";
-			}
-			((TextView) convertView.findViewById(android.R.id.text1)).setText(string);
-			return convertView;
-		}
-
 		@Override
 		public int getWidth(int column) {
 			return Math.round(widths[column + 1] * density);
@@ -197,8 +176,6 @@ public class FamilyTable extends Activity {
 			final int height;
 			if (row == -1) {
 				height = 35;
-			} else if (isFamily(row)) {
-				height = 25;
 			} else {
 				height = 45;
 			}
@@ -212,8 +189,6 @@ public class FamilyTable extends Activity {
 				itemViewType = 0;
 			} else if (row == -1) {
 				itemViewType = 1;
-			} else if (isFamily(row)) {
-				itemViewType = 4;
 			} else if (column == -1) {
 				itemViewType = 2;
 			} else {
@@ -222,32 +197,8 @@ public class FamilyTable extends Activity {
 			return itemViewType;
 		}
 
-		private boolean isFamily(int row) {
-			int family = 0;
-			while (row > 0) {
-				row -= familys[family].size() + 1;
-				family++;
-			}
-			return row == 0;
-		}
-
-		private NexusTypes getFamily(int row) {
-			int family = 0;
-			while (row >= 0) {
-				row -= familys[family].size() + 1;
-				family++;
-			}
-			return familys[family - 1];
-		}
-
 		private Nexus getDevice(int row) {
-			int family = 0;
-			while (row >= 0) {
-				row -= familys[family].size() + 1;
-				family++;
-			}
-			family--;
-			return familys[family].get(row + familys[family].size());
+			return familys.get(row);
 		}
 
 		@Override
