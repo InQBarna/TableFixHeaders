@@ -13,7 +13,7 @@ import android.widget.TextView;
  * Mutuactivos.
  * 
  * 
- * @author Brais Gabín
+ * @author Brais GabÃ­n
  */
 public abstract class SampleTableAdapter extends BaseTableAdapter {
 	private final Context context;

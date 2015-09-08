@@ -1,13 +1,13 @@
 package com.inqbarna.tablefixheaders;
 
-import java.util.Stack;
-
 import android.view.View;
+
+import java.util.Stack;
 
 /**
  * The Recycler facilitates reuse of views across layouts.
  * 
- * @author Brais Gabín (InQBarna)
+ * @author Brais GabÃ­n (InQBarna)
  */
 public class Recycler {
 

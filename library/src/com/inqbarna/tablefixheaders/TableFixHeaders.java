@@ -1,10 +1,5 @@
 package com.inqbarna.tablefixheaders;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.inqbarna.tablefixheaders.adapters.TableAdapter;
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -20,11 +15,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Scroller;
 
+import com.inqbarna.tablefixheaders.adapters.TableAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This view shows a table which can scroll in both directions. Also still
  * leaves the headers fixed.
- * 
- * @author Brais Gabín (InQBarna)
+ *
+ * @author Brais GabÃ­n (InQBarna)
  */
 public class TableFixHeaders extends ViewGroup {
 	private int currentX;

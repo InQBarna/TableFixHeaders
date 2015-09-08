@@ -10,7 +10,7 @@ import android.view.ViewGroup;
  * The Adapter is also responsible for making a View for each item in the data
  * set.
  * 
- * @author Brais Gabín (InQBarna)
+ * @author Brais GabÃ­n (InQBarna)
  * @see TableFixHeaders
  */
 public interface TableAdapter {
