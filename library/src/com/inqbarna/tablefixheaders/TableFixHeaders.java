@@ -24,7 +24,7 @@ import android.widget.Scroller;
  * This view shows a table which can scroll in both directions. Also still
  * leaves the headers fixed.
  * 
- * @author Brais Gabín (InQBarna)
+ * @author Brais GabÃ­n (InQBarna)
  */
 public class TableFixHeaders extends ViewGroup {
 	private int currentX;
