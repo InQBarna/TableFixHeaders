@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        minSdkVersion 4
+        minSdkVersion 5
         targetSdkVersion 23
 
     }
@@ -15,4 +15,3 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
 }
-
