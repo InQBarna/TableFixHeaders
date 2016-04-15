@@ -8,7 +8,6 @@ import com.inqbarna.tablefixheaders.adapters.TableAdapter;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Canvas;
 import android.os.Build;
@@ -124,18 +123,6 @@ public class TableFixHeaders extends ViewGroup {
 		this.maximumVelocity = configuration.getScaledMaximumFlingVelocity();
 
 		this.setWillNotDraw(false);
-
-		final TypedArray a = context.obtainStyledAttributes(R.styleable.View);
-		try {
-			initializeScrollbars(a);
-		} finally {
-			if (a != null) {
-				a.recycle();
-			}
-		}
-
-		this.setHorizontalScrollBarEnabled(true);
-		this.setVerticalScrollBarEnabled(true);
 	}
 
 	/**
