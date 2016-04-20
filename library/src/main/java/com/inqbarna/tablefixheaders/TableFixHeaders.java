@@ -57,6 +57,7 @@ public class TableFixHeaders extends ViewGroup {
 
 	private final ImageView[] shadows;
 	private final int shadowSize;
+	private boolean shadowsVisible = true;
 
 	private final int minimumVelocity;
 	private final int maximumVelocity;
@@ -730,18 +731,35 @@ public class TableFixHeaders extends ViewGroup {
 	}
 
 	private void shadowsVisibility() {
-		final int actualScrollX = getActualScrollX();
-		final int actualScrollY = getActualScrollY();
-		final int[] remainPixels = {
-				actualScrollX,
-				actualScrollY,
-				getMaxScrollX() - actualScrollX,
-				getMaxScrollY() - actualScrollY,
-		};
+		if (shadowsVisible) {
+			final int actualScrollX = getActualScrollX();
+			final int actualScrollY = getActualScrollY();
+			final int[] remainPixels = {
+					actualScrollX,
+					actualScrollY,
+					getMaxScrollX() - actualScrollX,
+					getMaxScrollY() - actualScrollY,
+			};
 
-		for (int i = 0; i < shadows.length; i++) {
-			setAlpha(shadows[i], Math.min(remainPixels[i] / (float) shadowSize, 1));
+			for (int i = 0; i < shadows.length; i++) {
+				if (shadows[i].getVisibility() != View.VISIBLE) shadows[i].setVisibility(View.VISIBLE);
+				setAlpha(shadows[i], Math.min(remainPixels[i] / (float) shadowSize, 1));
+			}
+		} else {
+			for (int i = 0; i < shadows.length; i++) {
+				if (shadows[i].getVisibility() != View.GONE) shadows[i].setVisibility(View.GONE);
+			}
 		}
+	}
+
+	public void setShadowsVisibility(final boolean visible) {
+		this.shadowsVisible = visible;
+
+		// If ready, update visibility
+		if (adapter != null && heights != null && widths != null) {
+			shadowsVisibility();
+		}
+		
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
