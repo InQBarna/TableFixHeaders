@@ -23,7 +23,7 @@ import android.widget.Scroller;
 /**
  * This view shows a table which can scroll in both directions. Also still
  * leaves the headers fixed.
- * 
+ *
  * @author Brais Gabín (InQBarna)
  */
 public class TableFixHeaders extends ViewGroup {
@@ -69,7 +69,7 @@ public class TableFixHeaders extends ViewGroup {
 
 	/**
 	 * Simple constructor to use when creating a view from code.
-	 * 
+	 *
 	 * @param context
 	 *            The Context the view is running in, through which it can
 	 *            access the current theme, resources, etc.
@@ -87,7 +87,7 @@ public class TableFixHeaders extends ViewGroup {
 	 *
 	 * The method onFinishInflate() will be called after all children have been
 	 * added.
-	 * 
+	 *
 	 * @param context
 	 *            The Context the view is running in, through which it can
 	 *            access the current theme, resources, etc.
@@ -127,7 +127,7 @@ public class TableFixHeaders extends ViewGroup {
 
 	/**
 	 * Returns the adapter currently associated with this widget.
-	 * 
+	 *
 	 * @return The adapter used to provide this view's content.
 	 */
 	public TableAdapter getAdapter() {
@@ -136,7 +136,7 @@ public class TableFixHeaders extends ViewGroup {
 
 	/**
 	 * Sets the data behind this TableFixHeaders.
-	 * 
+	 *
 	 * @param adapter
 	 *            The TableAdapter which is responsible for maintaining the data
 	 *            backing this list and for producing a view to represent an
@@ -889,5 +889,48 @@ public class TableFixHeaders extends ViewGroup {
 				scroller.forceFinished(true);
 			}
 		}
+	}
+
+	/**
+	 * Get tag data from View
+	 * @param view Child view
+	 * @param tag Resource Tag ID
+	 * @return Resource integer value
+	 * @throws IllegalArgumentException
+	 */
+	private static int getTagIntValue(View view, int tag) throws IllegalArgumentException {
+		final Integer value = (Integer) view.getTag(tag);
+		if(value == null) {
+			throw new IllegalArgumentException("tag not found");
+		}
+
+		return value;
+	}
+
+	/**
+	 * Extract type from View
+	 * @param view Child View
+	 * @return Type value
+	 */
+	public static int getType(View view) throws IllegalArgumentException {
+		return getTagIntValue(view, R.id.tag_type_view);
+	}
+
+	/**
+	 * Extract row from View
+	 * @param view Child View
+	 * @return Row value
+	 */
+	public static int getRow(View view) throws IllegalArgumentException {
+		return getTagIntValue(view, R.id.tag_row);
+	}
+
+	/**
+	 * Extract column from View
+	 * @param view Child View
+	 * @return Column value
+	 */
+	public static int getColumn(View view) throws IllegalArgumentException {
+		return getTagIntValue(view, R.id.tag_column);
 	}
 }
